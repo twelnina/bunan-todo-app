@@ -103,22 +103,20 @@ internal fun ListScreenContent(
     onPlannedDateFilterChange: (PlannedDateFilter) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
+    val today = uiState.today
+
     val listState = rememberLazyListState()
 
-    var hasAppliedInitialScroll by rememberSaveable {
-        mutableStateOf(false)
-    }
+    var hasAppliedInitialScroll by rememberSaveable { mutableStateOf(false) }
 
-    LaunchedEffect(uiState.today, uiState.todoGroups) {
+    LaunchedEffect(today, uiState.todoGroups) {
         if (hasAppliedInitialScroll) {
             return@LaunchedEffect
         }
 
-        val today = uiState.today ?: return@LaunchedEffect
-
         initialScrollItemIndex(
             todoGroups = uiState.todoGroups,
-            today = today
+            today = today ?: return@LaunchedEffect
         )?.let { itemIndex ->
             listState.scrollToItem(itemIndex)
         }
@@ -223,7 +221,6 @@ internal fun ListScreenContent(
         )
     }
 
-    val today = uiState.today
 
     if (todoForDateChange != null && today != null) {
         PlannedDatePickerDialog(

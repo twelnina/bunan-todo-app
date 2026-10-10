@@ -43,8 +43,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.twelnina.bunantodo.R
 import dev.twelnina.bunantodo.data.local.TodoEntity
-import dev.twelnina.bunantodo.ui.component.CardItem
 import dev.twelnina.bunantodo.ui.component.dialogs.PlannedDatePickerDialog
+import dev.twelnina.bunantodo.ui.list.component.TodoItem
 import dev.twelnina.bunantodo.ui.rememberYearMonthDayFormatter
 import dev.twelnina.bunantodo.ui.theme.RobotoFlexExpanded
 import dev.twelnina.bunantodo.ui.theme.TodoAppTheme
@@ -57,6 +57,7 @@ private const val PAST_INCOMPLETE_PREVIEW_LIMIT = 3
 @Composable
 fun HomeScreen(
     onEditTodo: (Int) -> Unit,
+    onDeleted: (TodoEntity) -> Unit,
     onSeeAllPastIncomplete: () -> Unit,
     viewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)
 ) {
@@ -66,6 +67,12 @@ fun HomeScreen(
         onCompletedChange = viewModel::updateCompleted,
         onPlannedDateChange = viewModel::updatePlannedDate,
         onEditTodo = onEditTodo,
+        onDelete = { todo ->
+            viewModel.deleteTodo(
+                todo = todo,
+                onDeleted = onDeleted
+            )
+        },
         onSeeAllPastIncomplete = onSeeAllPastIncomplete
     )
 }
@@ -76,12 +83,11 @@ private fun HomeScreenContent(
     onCompletedChange: (TodoEntity, Boolean) -> Unit,
     onPlannedDateChange: (TodoEntity, LocalDate) -> Unit,
     onEditTodo: (Int) -> Unit,
+    onDelete: (TodoEntity) -> Unit,
     onSeeAllPastIncomplete: () -> Unit
 ) {
-    var playInitialAnimation by rememberSaveable { mutableStateOf(true) }
-    var dateChangeTodoId by rememberSaveable { mutableStateOf<Int?>(null) }
-
     val today = uiState.today
+
     if (today == null) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -92,13 +98,22 @@ private fun HomeScreenContent(
         return
     }
 
+    var playInitialAnimation by rememberSaveable { mutableStateOf(true) }
+
     val visiblePastIncompleteItems = uiState.pastIncompleteItems.take(PAST_INCOMPLETE_PREVIEW_LIMIT)
-    val hasMorePastIncompleteItems = uiState.pastIncompleteItems.size > PAST_INCOMPLETE_PREVIEW_LIMIT
+    val hasMorePastIncompleteItems =
+        uiState.pastIncompleteItems.size > PAST_INCOMPLETE_PREVIEW_LIMIT
 
     val hasItems = uiState.todayItems.isNotEmpty() || uiState.pastIncompleteItems.isNotEmpty()
-    val todoForDateChange =
-        uiState.pastIncompleteItems.firstOrNull { it.todo.id == dateChangeTodoId }?.todo
-    val yearMonthDayFormatter = rememberYearMonthDayFormatter()
+
+    var expandedTodoId by rememberSaveable { mutableStateOf<Int?>(null) }
+
+    var dateChangeTodoId by rememberSaveable { mutableStateOf<Int?>(null) }
+    val todoForDateChange = dateChangeTodoId?.let { id ->
+        uiState.todayItems.firstOrNull { it.id == id }
+            ?: uiState.pastIncompleteItems.firstOrNull { it.todo.id == id }
+                ?.todo
+    }
 
     LaunchedEffect(hasItems) {
         if (hasItems && playInitialAnimation) {
@@ -123,7 +138,7 @@ private fun HomeScreenContent(
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = today.format(yearMonthDayFormatter),
+                        text = today.format(rememberYearMonthDayFormatter()),
                         fontFamily = RobotoFlexExpanded,
                         fontSize = 40.sp,
                         fontWeight = FontWeight(900),
@@ -176,6 +191,8 @@ private fun HomeScreenContent(
                         }
                     }
 
+                    val expanded = expandedTodoId == todo.id
+
                     AnimatedVisibility(
                         visibleState = visibleState, enter = fadeIn(
                             animationSpec = tween(
@@ -188,18 +205,28 @@ private fun HomeScreenContent(
                                 height / 4
                             })
                     ) {
-                        CardItem(
-                            todo = todo,
-                            onEdit = { onEditTodo(todo.id) },
-                            showDaysSincePlannedDate = false,
-                            onCheckedChange = { checked ->
-                                onCompletedChange(todo, checked)
-                            }
+                        TodoItem(
+                            todoItemInfo = todo,
+                            index = index,
+                            count = uiState.todayItems.size,
+                            expanded = expanded,
+                            onCheckedChange = onCompletedChange,
+                            onMoreClick = {
+                                expandedTodoId = if (expanded) null else todo.id
+                            },
+                            onChangePlannedDate = {
+                                expandedTodoId = null
+                                dateChangeTodoId = todo.id
+                            },
+                            onEdit = {
+                                expandedTodoId = null
+                                onEditTodo(todo.id)
+                            },
+                            onDelete = {
+                                expandedTodoId = null
+                                onDelete(todo)
+                            },
                         )
-                    }
-
-                    if (index < uiState.todayItems.lastIndex) {
-                        Spacer(modifier = Modifier.height(4.dp))
                     }
                 }
             }
@@ -230,8 +257,6 @@ private fun HomeScreenContent(
                         }
                     }
                 }
-
-                Spacer(modifier = Modifier.height(8.dp))
             }
 
             if (uiState.pastIncompleteItems.isEmpty()) {
@@ -257,6 +282,8 @@ private fun HomeScreenContent(
                         }
                     }
 
+                    val expanded = expandedTodoId == todo.todo.id
+
                     AnimatedVisibility(
                         visibleState = visibleState, enter = fadeIn(
                             animationSpec = tween(
@@ -265,23 +292,35 @@ private fun HomeScreenContent(
                         ) + slideInVertically(
                             animationSpec = tween(
                                 durationMillis = 300, delayMillis = index * 50
-                            ), initialOffsetY = { height ->
+                            ),
+                            initialOffsetY = { height ->
                                 height / 4
-                            })
-                    ) {
-                        CardItem(
-                            todo = todo.todo,
-                            showDaysSincePlannedDate = true,
-                            onCheckedChange = { checked ->
-                                onCompletedChange(todo.todo, checked)
-                            },
-                            onChangePlannedDate = { dateChangeTodoId = todo.todo.id },
-                            onEdit = { onEditTodo(todo.todo.id) },
-                            daysSincePlannedDate = todo.daysSincePlannedDate
+                            }
                         )
-                    }
-                    if (index < visiblePastIncompleteItems.lastIndex) {
-                        Spacer(modifier = Modifier.height(4.dp))
+                    ) {
+                        TodoItem(
+                            todoItemInfo = todo.todo,
+                            daysSincePlannedDate = todo.daysSincePlannedDate,
+                            index = index,
+                            count = uiState.todayItems.size,
+                            expanded = expanded,
+                            onCheckedChange = onCompletedChange,
+                            onMoreClick = {
+                                expandedTodoId = if (expanded) null else todo.todo.id
+                            },
+                            onChangePlannedDate = {
+                                expandedTodoId = null
+                                dateChangeTodoId = todo.todo.id
+                            },
+                            onEdit = {
+                                expandedTodoId = null
+                                onEditTodo(todo.todo.id)
+                            },
+                            onDelete = {
+                                expandedTodoId = null
+                                onDelete(todo.todo)
+                            },
+                        )
                     }
                 }
             }
@@ -339,6 +378,7 @@ private fun EmptyHomeScreenPreview() {
             onCompletedChange = { _, _ -> },
             onPlannedDateChange = { _, _ -> },
             onEditTodo = {},
+            onDelete = {},
             onSeeAllPastIncomplete = {}
         )
     }
