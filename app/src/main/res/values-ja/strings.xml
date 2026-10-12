@@ -81,7 +81,6 @@
     <string name="planned_date_picker_status_unscheduled">予定なし</string>
 
     <!-- Planned date dialog -->
-    <string name="planned_date_dialog_title">予定日を変更</string>
     <string name="planned_date_dialog_label_previous">変更前</string>
     <string name="planned_date_dialog_label_new">変更後</string>
     <string name="planned_date_dialog_status_unscheduled">予定なし</string>

@@ -21,4 +21,3 @@ Remove inapplicable items and explain any skipped checks. -->
 <!-- Replace # with the issue number, or write "None" if there is no related issue. -->
 
 Closes #
-
