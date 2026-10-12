@@ -67,14 +67,11 @@
     <string name="todo_list_header_today">今日</string>
     <string name="todo_list_header_tomorrow">明日</string>
 
-    <!-- Todo card -->
-    <plurals name="todo_card_status_days_since_planned_date">
+    <!-- Todo item -->
+    <plurals name="todo_item_status_days_since_planned_date">
         <item quantity="other">予定日から%d日経過</item>
     </plurals>
-    <string name="todo_card_action_change_planned_date">予定日を変更</string>
-    <string name="todo_card_action_edit">Todoを編集</string>
 
-    <!-- Todo item -->
     <string name="todo_item_action_more_options">その他のオプション</string>
     <string name="todo_item_action_delete">削除</string>
     <string name="todo_item_action_change_planned_date">予定日を変更</string>

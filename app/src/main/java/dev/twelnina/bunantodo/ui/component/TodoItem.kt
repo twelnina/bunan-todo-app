@@ -149,7 +149,7 @@ fun TodoItem(
                             )
                             Text(
                                 text = pluralStringResource(
-                                    R.plurals.todo_card_status_days_since_planned_date,
+                                    R.plurals.todo_item_status_days_since_planned_date,
                                     days, days,
                                 ),
                                 color = MaterialTheme.colorScheme.onErrorContainer,
