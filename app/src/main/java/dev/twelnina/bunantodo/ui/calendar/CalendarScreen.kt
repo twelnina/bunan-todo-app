@@ -29,7 +29,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,24 +45,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import dev.twelnina.bunantodo.R
-import dev.twelnina.bunantodo.data.local.TodoEntity
-import dev.twelnina.bunantodo.ui.component.CardItem
-import dev.twelnina.bunantodo.ui.elapsedDaysSincePlannedDate
-import dev.twelnina.bunantodo.ui.rememberMonthDayFormatter
-import dev.twelnina.bunantodo.ui.rememberYearMonthFormatter
-import dev.twelnina.bunantodo.ui.theme.TodoAppTheme
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
+import dev.twelnina.bunantodo.R
+import dev.twelnina.bunantodo.data.local.TodoEntity
+import dev.twelnina.bunantodo.ui.component.dialogs.PlannedDatePickerDialog
+import dev.twelnina.bunantodo.ui.elapsedDaysSincePlannedDate
+import dev.twelnina.bunantodo.ui.component.TodoItem
+import dev.twelnina.bunantodo.ui.rememberMonthDayFormatter
+import dev.twelnina.bunantodo.ui.rememberYearMonthFormatter
+import dev.twelnina.bunantodo.ui.theme.TodoAppTheme
 import java.time.LocalDate
 import java.time.YearMonth
 
 @Composable
 fun CalendarScreen(
-    onEditTodo: (Int) -> Unit,
+    onEdit: (Int) -> Unit,
+    onDeleted: (TodoEntity) -> Unit,
     viewModel: CalendarViewModel = viewModel(factory = CalendarViewModel.Factory)
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -69,7 +74,13 @@ fun CalendarScreen(
         onPreviousDate = viewModel::onPreviousDate,
         onNextDate = viewModel::onNextDate,
         onCompletedChange = viewModel::updateCompleted,
-        onEditTodo = onEditTodo
+        onPlannedDateChange = viewModel::updatePlannedDate,
+        onEdit = onEdit,
+        onDelete = { todo ->
+            viewModel.deleteTodo(todo) {
+                onDeleted(todo)
+            }
+        }
     )
 }
 
@@ -80,9 +91,12 @@ private fun CalendarScreenContent(
     onPreviousDate: (LocalDate) -> Unit,
     onNextDate: (LocalDate) -> Unit,
     onCompletedChange: (TodoEntity, Boolean) -> Unit,
-    onEditTodo: (Int) -> Unit
+    onPlannedDateChange: (TodoEntity, LocalDate) -> Unit,
+    onEdit: (Int) -> Unit,
+    onDelete: (TodoEntity) -> Unit
 ) {
-    val currentMonth = remember { YearMonth.now() }
+    val today = uiState.today ?: return
+    val currentMonth = remember { YearMonth.from(today) }
     val startMonth = remember(currentMonth) { currentMonth.minusMonths(12) }
     val endMonth = remember(currentMonth) { currentMonth.plusMonths(12) }
     val minDate = startMonth.atDay(1)
@@ -91,7 +105,12 @@ private fun CalendarScreenContent(
     val canGoPrevious = selectedDate?.isAfter(minDate) == true
     val canGoNext = selectedDate?.isBefore(maxDate) == true
 
-    val monthDayFormatter = rememberMonthDayFormatter()
+    var expandedTodoId by rememberSaveable { mutableStateOf<Int?>(null) }
+
+    var dateChangeTodoId by rememberSaveable { mutableStateOf<Int?>(null) }
+    val todoForDateChange = dateChangeTodoId?.let { id ->
+        uiState.todos.firstOrNull { it.id == id }
+    }
 
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         MonthCalendar(
@@ -117,7 +136,7 @@ private fun CalendarScreenContent(
                 )
             }
             Text(
-                text = uiState.selectedDate?.format(monthDayFormatter) ?: "",
+                text = uiState.selectedDate?.format(rememberMonthDayFormatter()) ?: "",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontWeight = FontWeight.Bold
@@ -139,23 +158,35 @@ private fun CalendarScreenContent(
                     items = uiState.selectedDateTodos,
                     key = { _, todo -> todo.id }
                 ) { index, todo ->
-                    val daysSincePlannedDate = uiState.today?.let { today ->
+                    val expanded = expandedTodoId == todo.id
+
+                    val daysSincePlannedDate = today.let { today ->
                         todo.elapsedDaysSincePlannedDate(today)
                     }
 
-                    CardItem(
-                        todo = todo,
+                    TodoItem(
+                        todoItemInfo = todo,
                         daysSincePlannedDate = daysSincePlannedDate,
-                        showDaysSincePlannedDate = true,
-                        onCheckedChange = { checked ->
-                            onCompletedChange(todo, checked)
+                        index = index,
+                        count = uiState.selectedDateTodos.size,
+                        expanded = expanded,
+                        onCheckedChange = onCompletedChange,
+                        onMoreClick = {
+                            expandedTodoId = if (expanded) null else todo.id
                         },
-                        onEdit = { onEditTodo(todo.id) }
+                        onChangePlannedDate = {
+                            expandedTodoId = null
+                            dateChangeTodoId = todo.id
+                        },
+                        onEdit = {
+                            expandedTodoId = null
+                            onEdit(todo.id)
+                        },
+                        onDelete = {
+                            expandedTodoId = null
+                            onDelete(todo)
+                        }
                     )
-
-                    if (index < uiState.selectedDateTodos.lastIndex) {
-                        Spacer(modifier = Modifier.height(4.dp))
-                    }
                 }
             }
         } else {
@@ -173,6 +204,20 @@ private fun CalendarScreenContent(
             }
         }
     }
+
+    todoForDateChange?.let {
+        PlannedDatePickerDialog(
+            today = today,
+            previousDate = it.plannedDate,
+            onDismissRequest = {
+                dateChangeTodoId = null
+            },
+            onConfirmRequest = { newDate ->
+                dateChangeTodoId = null
+                onPlannedDateChange(it, newDate)
+            }
+        )
+    }
 }
 
 @Composable
@@ -185,7 +230,6 @@ private fun MonthCalendar(
 ) {
     val currentMonth = remember { YearMonth.now() }
     val daysOfWeek = remember { daysOfWeek() }
-    val yearMonthFormatter = rememberYearMonthFormatter()
 
     val state = rememberCalendarState(
         startMonth = startMonth,
@@ -218,7 +262,7 @@ private fun MonthCalendar(
 
         Column(modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) {
             Text(
-                text = visibleMonth.format(yearMonthFormatter),
+                text = visibleMonth.format(rememberYearMonthFormatter()),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleMediumEmphasized,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,

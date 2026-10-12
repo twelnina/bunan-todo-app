@@ -3,6 +3,7 @@ package dev.twelnina.bunantodo.ui.calendar
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import dev.twelnina.bunantodo.TodoApplication
@@ -71,6 +72,21 @@ class CalendarViewModel(
             repository.update(
                 todo.copy(isCompleted = isCompleted)
             )
+        }
+    }
+
+    fun updatePlannedDate(todo: TodoEntity, newPlannedDate: LocalDate) {
+        viewModelScope.launch {
+            repository.update(
+                todo.copy(plannedDate = newPlannedDate)
+            )
+        }
+    }
+
+    fun deleteTodo(todo: TodoEntity, onDeleted: (TodoEntity) -> Unit) {
+        viewModelScope.launch {
+            repository.delete(todo)
+            onDeleted(todo)
         }
     }
 

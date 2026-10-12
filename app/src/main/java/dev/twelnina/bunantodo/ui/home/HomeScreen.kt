@@ -44,7 +44,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.twelnina.bunantodo.R
 import dev.twelnina.bunantodo.data.local.TodoEntity
 import dev.twelnina.bunantodo.ui.component.dialogs.PlannedDatePickerDialog
-import dev.twelnina.bunantodo.ui.list.component.TodoItem
+import dev.twelnina.bunantodo.ui.component.TodoItem
 import dev.twelnina.bunantodo.ui.rememberYearMonthDayFormatter
 import dev.twelnina.bunantodo.ui.theme.RobotoFlexExpanded
 import dev.twelnina.bunantodo.ui.theme.TodoAppTheme
@@ -302,7 +302,7 @@ private fun HomeScreenContent(
                             todoItemInfo = todo.todo,
                             daysSincePlannedDate = todo.daysSincePlannedDate,
                             index = index,
-                            count = uiState.todayItems.size,
+                            count = visiblePastIncompleteItems.size,
                             expanded = expanded,
                             onCheckedChange = onCompletedChange,
                             onMoreClick = {

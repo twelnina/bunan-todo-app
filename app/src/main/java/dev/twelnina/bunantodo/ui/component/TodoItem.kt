@@ -1,4 +1,4 @@
-package dev.twelnina.bunantodo.ui.list.component
+package dev.twelnina.bunantodo.ui.component
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Arrangement

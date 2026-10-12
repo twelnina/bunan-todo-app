@@ -51,7 +51,7 @@ import dev.twelnina.bunantodo.model.PlannedDateFilter
 import dev.twelnina.bunantodo.model.TodoTag
 import dev.twelnina.bunantodo.ui.component.dialogs.PlannedDatePickerDialog
 import dev.twelnina.bunantodo.ui.elapsedDaysSincePlannedDate
-import dev.twelnina.bunantodo.ui.list.component.TodoItem
+import dev.twelnina.bunantodo.ui.component.TodoItem
 import dev.twelnina.bunantodo.ui.list.component.TodoListControls
 import dev.twelnina.bunantodo.ui.rememberMonthDayFormatter
 import dev.twelnina.bunantodo.ui.theme.TodoAppTheme
