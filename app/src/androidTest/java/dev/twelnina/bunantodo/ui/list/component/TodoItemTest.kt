@@ -19,6 +19,7 @@ import androidx.compose.ui.test.performClick
 import androidx.test.platform.app.InstrumentationRegistry
 import dev.twelnina.bunantodo.R
 import dev.twelnina.bunantodo.data.local.TodoEntity
+import dev.twelnina.bunantodo.ui.component.TodoItem
 import dev.twelnina.bunantodo.ui.theme.TodoAppTheme
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -137,7 +138,7 @@ class TodoItemTest {
         composeTestRule
             .onNodeWithText(
                 getQuantityString(
-                    R.plurals.todo_card_status_days_since_planned_date,
+                    R.plurals.todo_item_status_days_since_planned_date,
                     days, days
                 )
             )
@@ -153,7 +154,7 @@ class TodoItemTest {
         composeTestRule
             .onNodeWithText(
                 getQuantityString(
-                    R.plurals.todo_card_status_days_since_planned_date,
+                    R.plurals.todo_item_status_days_since_planned_date,
                     days, days
                 )
             )
@@ -169,7 +170,7 @@ class TodoItemTest {
         composeTestRule
             .onNodeWithText(
                 getQuantityString(
-                    R.plurals.todo_card_status_days_since_planned_date,
+                    R.plurals.todo_item_status_days_since_planned_date,
                     days, days
                 )
             )

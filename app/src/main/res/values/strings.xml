@@ -66,15 +66,12 @@
     <string name="todo_list_header_today">Today</string>
     <string name="todo_list_header_tomorrow">Tomorrow</string>
 
-    <!-- Todo card -->
-    <plurals name="todo_card_status_days_since_planned_date">
+    <!-- Todo item -->
+    <plurals name="todo_item_status_days_since_planned_date">
         <item quantity="one">Planned %d day ago</item>
         <item quantity="other">Planned %d days ago</item>
     </plurals>
-    <string name="todo_card_action_change_planned_date">Change planned date</string>
-    <string name="todo_card_action_edit">Edit Todo</string>
 
-    <!-- Todo item -->
     <string name="todo_item_action_more_options">More options</string>
     <string name="todo_item_action_delete">Delete</string>
     <string name="todo_item_action_change_planned_date">Change planned date</string>
@@ -84,7 +81,6 @@
     <string name="planned_date_picker_status_unscheduled">Unscheduled</string>
 
     <!-- Planned date dialog -->
-    <string name="planned_date_dialog_title">Change planned date</string>
     <string name="planned_date_dialog_label_previous">Previous</string>
     <string name="planned_date_dialog_label_new">New</string>
     <string name="planned_date_dialog_status_unscheduled">Unscheduled</string>

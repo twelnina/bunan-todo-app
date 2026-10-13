@@ -1,4 +1,4 @@
-package dev.twelnina.bunantodo.ui.list.component
+package dev.twelnina.bunantodo.ui.component
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -149,7 +149,7 @@ fun TodoItem(
                             )
                             Text(
                                 text = pluralStringResource(
-                                    R.plurals.todo_card_status_days_since_planned_date,
+                                    R.plurals.todo_item_status_days_since_planned_date,
                                     days, days,
                                 ),
                                 color = MaterialTheme.colorScheme.onErrorContainer,
