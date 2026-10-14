@@ -31,8 +31,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.twelnina.bunantodo.R
 import dev.twelnina.bunantodo.model.TodoTag
-import dev.twelnina.bunantodo.ui.edit.component.PlannedDatePicker
-import dev.twelnina.bunantodo.ui.edit.component.TagSelector
+import dev.twelnina.bunantodo.ui.editor.component.PlannedDatePicker
+import dev.twelnina.bunantodo.ui.editor.component.TagSelector
 import dev.twelnina.bunantodo.ui.theme.TodoAppTheme
 import java.time.LocalDate
 
