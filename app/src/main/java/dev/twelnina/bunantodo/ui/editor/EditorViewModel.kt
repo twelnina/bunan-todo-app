@@ -8,11 +8,13 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import dev.twelnina.bunantodo.TodoApplication
 import dev.twelnina.bunantodo.data.repository.TodoRepository
 import dev.twelnina.bunantodo.data.time.CurrentDateProvider
+import dev.twelnina.bunantodo.model.TodoTag
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class EditorViewModel(
     private val repository: TodoRepository,
@@ -30,6 +32,31 @@ class EditorViewModel(
             }
         }
     }
+
+    fun updateTitle(newTitle: String) {
+        _uiState.update { currentState ->
+            currentState.copy(title = newTitle)
+        }
+    }
+
+    fun updateDetail(newDetail: String) {
+        _uiState.update { currentState ->
+            currentState.copy(detail = newDetail)
+        }
+    }
+
+    fun updatePlannedDate(newPlanedDate: LocalDate?) {
+        _uiState.update { currentState ->
+            currentState.copy(plannedDate = newPlanedDate)
+        }
+    }
+
+    fun updateSelectedTag(newSelectedTag: TodoTag?) {
+        _uiState.update { currentState ->
+            currentState.copy(selectedTag = newSelectedTag)
+        }
+    }
+
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
