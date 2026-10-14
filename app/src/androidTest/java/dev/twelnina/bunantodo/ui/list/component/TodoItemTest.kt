@@ -32,7 +32,7 @@ class TodoItemTest {
     private val todo = TodoEntity(
         id = 1,
         title = "Study Kotlin",
-        description = "Read Compose documentation",
+        detail = "Read Compose documentation",
         plannedDate = null,
         tag = null
     )
@@ -46,7 +46,7 @@ class TodoItemTest {
             .assert(hasNoClickAction())
 
         composeTestRule
-            .onNodeWithText(todo.description)
+            .onNodeWithText(todo.detail)
             .assert(hasNoClickAction())
     }
 

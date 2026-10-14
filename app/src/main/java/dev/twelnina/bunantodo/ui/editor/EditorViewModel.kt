@@ -73,7 +73,7 @@ class EditorViewModel(
             val todo = when (mode) {
                 EditorMode.Add -> TodoEntity(
                     title = title,
-                    description = detail,
+                    detail = detail,
                     plannedDate = plannedDate,
                     tag = selectedTag
                 )
@@ -83,7 +83,7 @@ class EditorViewModel(
 
                     original.copy(
                         title = title,
-                        description = detail,
+                        detail = detail,
                         plannedDate = plannedDate,
                         tag = selectedTag
                     )
@@ -109,7 +109,7 @@ class EditorViewModel(
                 todo.run {
                     currentState.copy(
                         title = title,
-                        detail = description,
+                        detail = detail,
                         plannedDate = plannedDate,
                         selectedTag = tag
                     )

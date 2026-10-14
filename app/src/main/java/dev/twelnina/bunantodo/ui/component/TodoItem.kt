@@ -127,7 +127,7 @@ fun TodoItem(
                 },
                 supportingContent = {
                     Text(
-                        text = todoItemInfo.description,
+                        text = todoItemInfo.detail,
                         fontSize = 12.sp,
                         lineHeight = 18.sp
                     )

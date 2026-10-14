@@ -73,7 +73,7 @@ class EditViewModelTest {
             val originalTodo = TodoEntity(
                 id = 1,
                 title = "Study Kotlin",
-                description = "Review coroutine basics",
+                detail = "Review coroutine basics",
                 plannedDate = LocalDate.of(2026, 9, 21),
                 tag = TodoTag.STUDY,
                 isCompleted = isCompleted

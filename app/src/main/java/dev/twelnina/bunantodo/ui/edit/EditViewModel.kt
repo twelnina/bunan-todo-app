@@ -42,7 +42,7 @@ class EditViewModel(
                         isLoaded = true,
                         id = id,
                         title = title,
-                        description = description,
+                        description = detail,
                         plannedDate = plannedDate,
                         selectedTag = tag,
                         isCompleted = isCompleted,
@@ -60,7 +60,7 @@ class EditViewModel(
                     TodoEntity(
                         id = id,
                         title = title,
-                        description = description,
+                        detail = description,
                         plannedDate = plannedDate,
                         tag = selectedTag,
                         isCompleted = isCompleted
@@ -76,7 +76,7 @@ class EditViewModel(
             TodoEntity(
                 id = id,
                 title = title,
-                description = description,
+                detail = description,
                 plannedDate = plannedDate,
                 tag = selectedTag,
                 isCompleted = isCompleted

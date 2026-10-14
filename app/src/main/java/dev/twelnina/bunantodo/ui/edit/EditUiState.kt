@@ -22,7 +22,7 @@ data class EditUiState(
     val hasChanges: Boolean
         get() = originalTodo != null && (
                 title != originalTodo.title ||
-                        description != originalTodo.description ||
+                        description != originalTodo.detail ||
                         plannedDate != originalTodo.plannedDate ||
                         selectedTag != originalTodo.tag
                 )

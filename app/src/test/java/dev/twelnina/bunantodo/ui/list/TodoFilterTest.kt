@@ -15,7 +15,7 @@ class TodoFilterTest {
         val kotlinTodo = TodoEntity(
             id = 1,
             title = "Study Kotlin",
-            description = "Read the documentation",
+            detail = "Read the documentation",
             plannedDate = today,
             tag = TodoTag.STUDY
         )
@@ -23,7 +23,7 @@ class TodoFilterTest {
         val shoppingTodo = TodoEntity(
             id = 2,
             title = "Buy milk",
-            description = "Go to the supermarket",
+            detail = "Go to the supermarket",
             plannedDate = today,
             tag = TodoTag.SHOPPING
         )
@@ -46,7 +46,7 @@ class TodoFilterTest {
         val kotlinTodo = TodoEntity(
             id = 1,
             title = "Study Programming",
-            description = "Read the kotlin documentation",
+            detail = "Read the kotlin documentation",
             plannedDate = today,
             tag = TodoTag.STUDY
         )
@@ -54,7 +54,7 @@ class TodoFilterTest {
         val shoppingTodo = TodoEntity(
             id = 2,
             title = "Buy milk",
-            description = "Go to the supermarket",
+            detail = "Go to the supermarket",
             plannedDate = today,
             tag = TodoTag.SHOPPING
         )
@@ -77,7 +77,7 @@ class TodoFilterTest {
         val workTodo = TodoEntity(
             id = 1,
             title = "Write report",
-            description = "Prepare the monthly report",
+            detail = "Prepare the monthly report",
             plannedDate = today,
             tag = TodoTag.WORK
         )
@@ -85,7 +85,7 @@ class TodoFilterTest {
         val studyTodo = TodoEntity(
             id = 2,
             title = "Study Kotlin",
-            description = "Read the documentation",
+            detail = "Read the documentation",
             plannedDate = today,
             tag = TodoTag.STUDY
         )
@@ -93,7 +93,7 @@ class TodoFilterTest {
         val noTagTodo = TodoEntity(
             id = 3,
             title = "Clean room",
-            description = "Organize the desk",
+            detail = "Organize the desk",
             plannedDate = today,
             tag = null
         )
@@ -116,7 +116,7 @@ class TodoFilterTest {
         val workTodo = TodoEntity(
             id = 1,
             title = "Write report",
-            description = "Prepare the monthly report",
+            detail = "Prepare the monthly report",
             plannedDate = today,
             tag = TodoTag.WORK
         )
@@ -124,7 +124,7 @@ class TodoFilterTest {
         val studyTodo = TodoEntity(
             id = 2,
             title = "Study Kotlin",
-            description = "Read the documentation",
+            detail = "Read the documentation",
             plannedDate = today,
             tag = TodoTag.STUDY
         )
@@ -132,7 +132,7 @@ class TodoFilterTest {
         val shoppingTodo = TodoEntity(
             id = 3,
             title = "Buy milk",
-            description = "Go to the supermarket",
+            detail = "Go to the supermarket",
             plannedDate = today,
             tag = TodoTag.SHOPPING
         )
@@ -155,7 +155,7 @@ class TodoFilterTest {
         val yesterdayTodo = TodoEntity(
             id = 1,
             title = "Yesterday task",
-            description = "This task was planned for yesterday",
+            detail = "This task was planned for yesterday",
             plannedDate = today.minusDays(1),
             tag = TodoTag.WORK
         )
@@ -163,7 +163,7 @@ class TodoFilterTest {
         val todayTodo = TodoEntity(
             id = 2,
             title = "Today task",
-            description = "This task is planned for today",
+            detail = "This task is planned for today",
             plannedDate = today,
             tag = TodoTag.STUDY
         )
@@ -171,7 +171,7 @@ class TodoFilterTest {
         val tomorrowTodo = TodoEntity(
             id = 3,
             title = "Tomorrow task",
-            description = "This task is planned for tomorrow",
+            detail = "This task is planned for tomorrow",
             plannedDate = today.plusDays(1),
             tag = TodoTag.SHOPPING
         )
@@ -179,7 +179,7 @@ class TodoFilterTest {
         val noDateTodo = TodoEntity(
             id = 4,
             title = "Unscheduled task",
-            description = "This task has no planned date",
+            detail = "This task has no planned date",
             plannedDate = null,
             tag = null
         )
@@ -207,7 +207,7 @@ class TodoFilterTest {
         val todayTodo = TodoEntity(
             id = 1,
             title = "Today task",
-            description = "This task is planned for today",
+            detail = "This task is planned for today",
             plannedDate = today,
             tag = TodoTag.WORK
         )
@@ -215,7 +215,7 @@ class TodoFilterTest {
         val tomorrowTodo = TodoEntity(
             id = 2,
             title = "Tomorrow task",
-            description = "This task is planned for tomorrow",
+            detail = "This task is planned for tomorrow",
             plannedDate = today.plusDays(1),
             tag = TodoTag.STUDY
         )
@@ -223,7 +223,7 @@ class TodoFilterTest {
         val dayAfterTomorrowTodo = TodoEntity(
             id = 3,
             title = "Day after tomorrow task",
-            description = "This task is planned for in two days",
+            detail = "This task is planned for in two days",
             plannedDate = today.plusDays(2),
             tag = TodoTag.SHOPPING
         )
@@ -231,7 +231,7 @@ class TodoFilterTest {
         val noDateTodo = TodoEntity(
             id = 4,
             title = "Unscheduled task",
-            description = "This task has no planned date",
+            detail = "This task has no planned date",
             plannedDate = null,
             tag = null
         )
@@ -260,7 +260,7 @@ class TodoFilterTest {
         val yesterdayTodo = TodoEntity(
             id = 1,
             title = "Yesterday task",
-            description = "This task was planned for yesterday",
+            detail = "This task was planned for yesterday",
             plannedDate = today.minusDays(1),
             tag = null
         )
@@ -268,7 +268,7 @@ class TodoFilterTest {
         val todayTodo = TodoEntity(
             id = 2,
             title = "Today task",
-            description = "This task is planned for today",
+            detail = "This task is planned for today",
             plannedDate = today,
             tag = null
         )
@@ -276,7 +276,7 @@ class TodoFilterTest {
         val fridayTodo = TodoEntity(
             id = 3,
             title = "Friday task",
-            description = "This task is planned for on Friday",
+            detail = "This task is planned for on Friday",
             plannedDate = today.plusDays(2),
             tag = null
         )
@@ -284,7 +284,7 @@ class TodoFilterTest {
         val sundayTodo = TodoEntity(
             id = 4,
             title = "Sunday task",
-            description = "This task is planned for on Sunday",
+            detail = "This task is planned for on Sunday",
             plannedDate = today.plusDays(4),
             tag = null
         )
@@ -292,7 +292,7 @@ class TodoFilterTest {
         val nextMondayTodo = TodoEntity(
             id = 5,
             title = "Next Monday task",
-            description = "This task is planned for next week",
+            detail = "This task is planned for next week",
             plannedDate = today.plusDays(5),
             tag = null
         )
@@ -300,7 +300,7 @@ class TodoFilterTest {
         val noDateTodo = TodoEntity(
             id = 6,
             title = "Unscheduled task",
-            description = "This task has no planned date",
+            detail = "This task has no planned date",
             plannedDate = null,
             tag = null
         )
@@ -330,7 +330,7 @@ class TodoFilterTest {
         val lastWeekTodo = TodoEntity(
             id = 1,
             title = "Last week task",
-            description = "This task was planned for last week",
+            detail = "This task was planned for last week",
             plannedDate = today.minusDays(7),
             tag = null
         )
@@ -338,7 +338,7 @@ class TodoFilterTest {
         val yesterdayTodo = TodoEntity(
             id = 2,
             title = "Yesterday task",
-            description = "This task was planned for yesterday",
+            detail = "This task was planned for yesterday",
             plannedDate = today.minusDays(1),
             tag = null
         )
@@ -346,7 +346,7 @@ class TodoFilterTest {
         val todayTodo = TodoEntity(
             id = 3,
             title = "Today task",
-            description = "This task is planned for today",
+            detail = "This task is planned for today",
             plannedDate = today,
             tag = null
         )
@@ -354,7 +354,7 @@ class TodoFilterTest {
         val tomorrowTodo = TodoEntity(
             id = 4,
             title = "Tomorrow task",
-            description = "This task is planned for tomorrow",
+            detail = "This task is planned for tomorrow",
             plannedDate = today.plusDays(1),
             tag = null
         )
@@ -362,7 +362,7 @@ class TodoFilterTest {
         val noDateTodo = TodoEntity(
             id = 5,
             title = "Unscheduled task",
-            description = "This task has no planned date",
+            detail = "This task has no planned date",
             plannedDate = null,
             tag = null
         )
@@ -391,7 +391,7 @@ class TodoFilterTest {
         val pastIncompleteTodo = TodoEntity(
             id = 1,
             title = "Earlier task",
-            description = "This task was planned for yesterday",
+            detail = "This task was planned for yesterday",
             plannedDate = today.minusDays(1),
             tag = null
         )
@@ -399,7 +399,7 @@ class TodoFilterTest {
         val todayTodo = TodoEntity(
             id = 2,
             title = "Today task",
-            description = "This task is planned for today",
+            detail = "This task is planned for today",
             plannedDate = today,
             tag = null
         )
@@ -407,7 +407,7 @@ class TodoFilterTest {
         val futureTodo = TodoEntity(
             id = 3,
             title = "Future task",
-            description = "This task is planned for next week",
+            detail = "This task is planned for next week",
             plannedDate = today.plusDays(7),
             tag = null
         )
@@ -415,7 +415,7 @@ class TodoFilterTest {
         val noDateTodo = TodoEntity(
             id = 4,
             title = "Unscheduled task",
-            description = "This task has no planned date",
+            detail = "This task has no planned date",
             plannedDate = null,
             tag = null
         )
@@ -443,7 +443,7 @@ class TodoFilterTest {
         val pastIncompleteTodo = TodoEntity(
             id = 1,
             title = "Earlier task",
-            description = "This task was planned for yesterday",
+            detail = "This task was planned for yesterday",
             plannedDate = today.minusDays(1),
             tag = null
         )
@@ -451,7 +451,7 @@ class TodoFilterTest {
         val todayTodo = TodoEntity(
             id = 2,
             title = "Today task",
-            description = "This task is planned for today",
+            detail = "This task is planned for today",
             plannedDate = today,
             tag = null
         )
@@ -459,7 +459,7 @@ class TodoFilterTest {
         val futureTodo = TodoEntity(
             id = 3,
             title = "Future task",
-            description = "This task is planned for next week",
+            detail = "This task is planned for next week",
             plannedDate = today.plusDays(7),
             tag = null
         )
@@ -467,7 +467,7 @@ class TodoFilterTest {
         val noDateTodo = TodoEntity(
             id = 4,
             title = "Unscheduled task",
-            description = "This task has no planned date",
+            detail = "This task has no planned date",
             plannedDate = null,
             tag = null
         )
@@ -503,7 +503,7 @@ class TodoFilterTest {
         val incompleteTodo = TodoEntity(
             id = 1,
             title = "Earlier task",
-            description = "",
+            detail = "",
             plannedDate = today.minusDays(1),
             tag = null,
             isCompleted = false
@@ -532,7 +532,7 @@ class TodoFilterTest {
         val matchingTodo = TodoEntity(
             id = 1,
             title = "Write report",
-            description = "Prepare the monthly summary",
+            detail = "Prepare the monthly summary",
             plannedDate = today,
             tag = TodoTag.WORK
         )
@@ -540,7 +540,7 @@ class TodoFilterTest {
         val queryMismatchTodo = TodoEntity(
             id = 2,
             title = "Prepare slides",
-            description = "Create the presentation",
+            detail = "Create the presentation",
             plannedDate = today,
             tag = TodoTag.WORK
         )
@@ -548,7 +548,7 @@ class TodoFilterTest {
         val tagMismatchTodo = TodoEntity(
             id = 3,
             title = "Study report",
-            description = "Read the study materials",
+            detail = "Read the study materials",
             plannedDate = today,
             tag = TodoTag.STUDY
         )
@@ -556,7 +556,7 @@ class TodoFilterTest {
         val dateMismatchTodo = TodoEntity(
             id = 4,
             title = "Future report",
-            description = "Prepare next month's summary",
+            detail = "Prepare next month's summary",
             plannedDate = today.plusDays(1),
             tag = TodoTag.WORK
         )

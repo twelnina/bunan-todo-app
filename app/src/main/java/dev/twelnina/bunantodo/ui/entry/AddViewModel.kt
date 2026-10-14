@@ -70,7 +70,7 @@ class AddViewModel(
                 todoRepository.insert(
                     TodoEntity(
                         title = title,
-                        description = description,
+                        detail = description,
                         plannedDate = plannedDate,
                         tag = selectedTag
                     )

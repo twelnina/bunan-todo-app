@@ -373,7 +373,7 @@ private fun TodoItemPreview() {
             todoItemInfo = TodoEntity(
                 id = 1,
                 title = "Grocery Shopping",
-                description = "Visit the local farmers market to pick up fresh seasonal vegetables, organic fruits, and the special sourdough bread that the whole family loves for Sunday brunch.",
+                detail = "Visit the local farmers market to pick up fresh seasonal vegetables, organic fruits, and the special sourdough bread that the whole family loves for Sunday brunch.",
                 plannedDate = LocalDate.now(),
                 tag = TodoTag.SHOPPING
             ),

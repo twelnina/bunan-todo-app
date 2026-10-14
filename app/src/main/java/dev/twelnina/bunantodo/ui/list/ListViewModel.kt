@@ -161,7 +161,7 @@ internal fun filterTodos(
     return items.filter { item ->
         val matchesQuery =
             item.title.contains(query, ignoreCase = true) ||
-                    item.description.contains(query, ignoreCase = true)
+                    item.detail.contains(query, ignoreCase = true)
         val matchesTag = if (tags.isEmpty()) {
             true
         } else {
