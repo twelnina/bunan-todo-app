@@ -53,7 +53,7 @@ fun TodoEntryBody(
         TextField(
             value = description,
             onValueChange = onDescriptionChange,
-            label = { Text(text = stringResource(R.string.todo_editor_field_description)) },
+            label = { Text(text = stringResource(R.string.todo_editor_field_detail)) },
             minLines = 5,
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
