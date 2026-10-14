@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import dev.twelnina.bunantodo.TodoApplication
+import dev.twelnina.bunantodo.data.local.TodoEntity
 import dev.twelnina.bunantodo.data.repository.TodoRepository
 import dev.twelnina.bunantodo.data.time.CurrentDateProvider
 import dev.twelnina.bunantodo.model.TodoTag
@@ -18,10 +19,13 @@ import java.time.LocalDate
 
 class EditorViewModel(
     private val repository: TodoRepository,
-    private val currentDateProvider: CurrentDateProvider
+    private val currentDateProvider: CurrentDateProvider,
+    private val mode: EditorMode
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(EditorUiState())
     val uiState: StateFlow<EditorUiState> = _uiState.asStateFlow()
+
+    private var originalTodo: TodoEntity? = null
 
     init {
         viewModelScope.launch {
@@ -30,6 +34,11 @@ class EditorViewModel(
                     currentState.copy(today = today)
                 }
             }
+        }
+
+        when (val currentMode = mode) {
+            EditorMode.Add -> Unit
+            is EditorMode.Edit -> loadTodo(currentMode.id)
         }
     }
 
@@ -57,16 +66,69 @@ class EditorViewModel(
         }
     }
 
+    fun saveTodo(onSaved: () -> Unit) {
+        uiState.value.run {
+            if (!isEntryValid) return
+
+            val todo = when (mode) {
+                EditorMode.Add -> TodoEntity(
+                    title = title,
+                    description = detail,
+                    plannedDate = plannedDate,
+                    tag = selectedTag
+                )
+
+                is EditorMode.Edit -> {
+                    val original = originalTodo ?: return
+
+                    original.copy(
+                        title = title,
+                        description = detail,
+                        plannedDate = plannedDate,
+                        tag = selectedTag
+                    )
+                }
+            }
+
+            viewModelScope.launch {
+                when (mode) {
+                    EditorMode.Add -> repository.insert(todo)
+                    is EditorMode.Edit -> repository.update(todo)
+                }
+                onSaved()
+            }
+        }
+    }
+
+    private fun loadTodo(id: Int) {
+        viewModelScope.launch {
+            val todo = repository.getItem(id) ?: return@launch
+            originalTodo = todo
+
+            _uiState.update { currentState ->
+                todo.run {
+                    currentState.copy(
+                        title = title,
+                        detail = description,
+                        plannedDate = plannedDate,
+                        selectedTag = tag
+                    )
+                }
+            }
+        }
+    }
+
 
     companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
+        fun factory(mode: EditorMode): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application =
                     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as TodoApplication)
                 val repository = application.repository
                 EditorViewModel(
                     repository = repository,
-                    currentDateProvider = application.currentDateProvider
+                    currentDateProvider = application.currentDateProvider,
+                    mode = mode
                 )
             }
         }

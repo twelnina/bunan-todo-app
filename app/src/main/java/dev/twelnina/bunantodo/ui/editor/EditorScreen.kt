@@ -26,7 +26,8 @@ import java.time.LocalDate
 
 @Composable
 fun EditorScreen(
-    viewModel: EditorViewModel = viewModel(factory = EditorViewModel.Factory)
+    mode: EditorMode,
+    viewModel: EditorViewModel = viewModel(factory = EditorViewModel.factory(mode))
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
