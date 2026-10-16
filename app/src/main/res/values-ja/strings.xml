@@ -23,6 +23,7 @@
     <string name="todo_editor_section_tags">タグ</string>
     <string name="todo_editor_action_delete">削除</string>
     <string name="todo_editor_action_done">完了</string>
+    <string name="todo_editor_error_not_found">Todoが見つかりません</string>
 
     <!-- Todo tags -->
     <string name="todo_tag_study">勉強</string>

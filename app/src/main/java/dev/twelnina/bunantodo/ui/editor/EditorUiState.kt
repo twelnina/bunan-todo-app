@@ -4,6 +4,8 @@ import dev.twelnina.bunantodo.model.TodoTag
 import java.time.LocalDate
 
 data class EditorUiState(
+    val isLoading: Boolean = false,
+    val isTodoMissing: Boolean = false,
     val today: LocalDate? = null,
     val title: String = "",
     val detail: String = "",
@@ -11,5 +13,5 @@ data class EditorUiState(
     val selectedTag: TodoTag? = null,
 ) {
     val isEntryValid: Boolean
-        get() = title.isNotBlank()
+        get() = !isLoading && !isTodoMissing && today != null && title.isNotBlank()
 }

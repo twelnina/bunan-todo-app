@@ -22,7 +22,7 @@ class EditorViewModel(
     private val currentDateProvider: CurrentDateProvider,
     private val mode: EditorMode
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(EditorUiState())
+    private val _uiState = MutableStateFlow(EditorUiState(isLoading = mode is EditorMode.Edit))
     val uiState: StateFlow<EditorUiState> = _uiState.asStateFlow()
 
     private var originalTodo: TodoEntity? = null
@@ -36,9 +36,9 @@ class EditorViewModel(
             }
         }
 
-        when (val currentMode = mode) {
+        when (mode) {
             EditorMode.Add -> Unit
-            is EditorMode.Edit -> loadTodo(currentMode.id)
+            is EditorMode.Edit -> loadTodo(mode.id)
         }
     }
 
@@ -102,12 +102,17 @@ class EditorViewModel(
 
     private fun loadTodo(id: Int) {
         viewModelScope.launch {
-            val todo = repository.getItem(id) ?: return@launch
+            val todo = repository.getItem(id)
+            if (todo == null) {
+                _uiState.update { it.copy(isLoading = false, isTodoMissing = true) }
+                return@launch
+            }
             originalTodo = todo
 
             _uiState.update { currentState ->
                 todo.run {
                     currentState.copy(
+                        isLoading = false,
                         title = title,
                         detail = detail,
                         plannedDate = plannedDate,

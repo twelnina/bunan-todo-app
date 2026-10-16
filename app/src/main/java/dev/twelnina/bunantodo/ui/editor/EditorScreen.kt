@@ -1,6 +1,8 @@
 package dev.twelnina.bunantodo.ui.editor
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,6 +23,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -101,6 +104,26 @@ private fun EditorScreenContent(
     ) { innerPadding ->
         val today = uiState.today
 
+        if (uiState.isTodoMissing) {
+            Box(
+                modifier = Modifier.fillMaxSize().padding(innerPadding),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(stringResource(R.string.todo_editor_error_not_found))
+            }
+            return@Scaffold
+        }
+
+        if (uiState.isLoading || today == null) {
+            Box(
+                modifier = Modifier.fillMaxSize().padding(innerPadding),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+            return@Scaffold
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -144,15 +167,11 @@ private fun EditorScreenContent(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            if (today == null) {
-                CircularProgressIndicator()
-            } else {
-                PlannedDatePicker(
-                    today = today,
-                    onDateChange = onPlannedDateChange,
-                    selectedDate = uiState.plannedDate
-                )
-            }
+            PlannedDatePicker(
+                today = today,
+                onDateChange = onPlannedDateChange,
+                selectedDate = uiState.plannedDate
+            )
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -175,7 +194,7 @@ private fun EditorScreenContent(
 private fun EditorScreenContentPreview() {
     TodoAppTheme {
         EditorScreenContent(
-            uiState = EditorUiState(),
+            uiState = EditorUiState(today = LocalDate.of(2026, 9, 23)),
             mode = EditorMode.Add,
             onBack = {},
             onDone = {},
