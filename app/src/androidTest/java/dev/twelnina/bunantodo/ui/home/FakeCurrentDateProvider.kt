@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.time.LocalDate
 
-class FakeCurrentDateProvider(
+internal class FakeCurrentDateProvider(
     initialDate: LocalDate,
 ) : CurrentDateProvider {
     private val date = MutableStateFlow(initialDate)
