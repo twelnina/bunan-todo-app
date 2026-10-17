@@ -18,8 +18,8 @@ class TodoRepository(private val todoDao: TodoDao) {
         todoDao.delete(todoEntity)
     }
 
-    fun getAllItems(): Flow<List<TodoEntity>> {
-        return todoDao.getAllItem()
+    fun observeAllItems(): Flow<List<TodoEntity>> {
+        return todoDao.observeAllItem()
     }
 
     suspend fun getItem(id: Int): TodoEntity? {

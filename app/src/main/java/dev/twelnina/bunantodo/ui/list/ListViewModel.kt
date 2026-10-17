@@ -42,7 +42,7 @@ class ListViewModel(
 
     val uiState: StateFlow<ListUiState> = combine(
         currentDateProvider.observeDate(),
-        todoRepository.getAllItems(),
+        todoRepository.observeAllItems(),
         _controlsState
     ) { today, items, controls ->
         val filteredTodos = filterTodos(

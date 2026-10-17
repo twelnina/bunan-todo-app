@@ -42,7 +42,7 @@ class FakeTodoDao : TodoDao {
         error("Not used by editor tests")
     }
 
-    override fun getAllItem(): Flow<List<TodoEntity>> {
+    override fun observeAllItem(): Flow<List<TodoEntity>> {
         error("Not used by editor tests")
     }
 

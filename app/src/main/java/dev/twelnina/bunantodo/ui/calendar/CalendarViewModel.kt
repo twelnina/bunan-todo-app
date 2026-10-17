@@ -3,7 +3,6 @@ package dev.twelnina.bunantodo.ui.calendar
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import dev.twelnina.bunantodo.TodoApplication
@@ -26,7 +25,7 @@ class CalendarViewModel(
 
     val uiState: StateFlow<CalendarUiState> = combine(
         currentDateProvider.observeDate(),
-        repository.getAllItems(),
+        repository.observeAllItems(),
         _selectedDate
     ) { today, todos, selectedDate ->
         val date = selectedDate ?: today
