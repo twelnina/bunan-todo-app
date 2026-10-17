@@ -18,11 +18,12 @@
     <string name="todo_add_screen_title">Todoを追加</string>
     <string name="todo_edit_screen_title">Todoを編集</string>
     <string name="todo_editor_field_title">タイトル</string>
-    <string name="todo_editor_field_description">説明</string>
+    <string name="todo_editor_field_detail">詳細</string>
     <string name="todo_editor_section_planned_date">予定日</string>
     <string name="todo_editor_section_tags">タグ</string>
     <string name="todo_editor_action_delete">削除</string>
     <string name="todo_editor_action_done">完了</string>
+    <string name="todo_editor_error_not_found">Todoが見つかりません</string>
 
     <!-- Todo tags -->
     <string name="todo_tag_study">勉強</string>

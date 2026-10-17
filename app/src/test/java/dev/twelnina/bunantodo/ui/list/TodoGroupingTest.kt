@@ -55,7 +55,7 @@ class TodoGroupingTest {
         return TodoEntity(
             id = id,
             title = "Todo $id",
-            description = "Description $id",
+            detail = "Description $id",
             plannedDate = plannedDate,
             tag = null
         )

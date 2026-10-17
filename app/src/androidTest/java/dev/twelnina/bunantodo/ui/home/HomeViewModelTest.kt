@@ -94,7 +94,7 @@ class HomeViewModelTest {
         TodoEntity(
             id = id,
             title = "Todo $id",
-            description = "",
+            detail = "",
             plannedDate = plannedDate,
             tag = null,
             isCompleted = isCompleted

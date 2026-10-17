@@ -17,11 +17,12 @@
     <string name="todo_add_screen_title">Add Todo</string>
     <string name="todo_edit_screen_title">Edit Todo</string>
     <string name="todo_editor_field_title">Title</string>
-    <string name="todo_editor_field_description">Description</string>
+    <string name="todo_editor_field_detail">Detail</string>
     <string name="todo_editor_section_planned_date">Planned date</string>
     <string name="todo_editor_section_tags">Tags</string>
     <string name="todo_editor_action_delete">Delete</string>
     <string name="todo_editor_action_done">Done</string>
+    <string name="todo_editor_error_not_found">Todo not found</string>
 
     <!-- Todo tags -->
     <string name="todo_tag_study">Study</string>

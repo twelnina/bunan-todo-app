@@ -1,4 +1,4 @@
-package dev.twelnina.bunantodo.ui.edit.component
+package dev.twelnina.bunantodo.ui.editor.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

@@ -30,7 +30,7 @@ class ListScreenTest {
         val todo = TodoEntity(
             id = 1,
             title = "Study Kotlin",
-            description = "Read the documentation",
+            detail = "Read the documentation",
             plannedDate = LocalDate.of(2026, 9, 13),
             tag = TodoTag.STUDY
         )
@@ -140,7 +140,7 @@ class ListScreenTest {
         val todo = TodoEntity(
             id = 2,
             title = "Read a book",
-            description = "Read one chapter",
+            detail = "Read one chapter",
             plannedDate = null,
             tag = null
         )
@@ -165,7 +165,7 @@ class ListScreenTest {
         val todo = TodoEntity(
             id = 42,
             title = "Update project",
-            description = "Review the implementation",
+            detail = "Review the implementation",
             plannedDate = null,
             tag = null
         )
@@ -204,7 +204,7 @@ class ListScreenTest {
         val todo = TodoEntity(
             id = 2,
             title = "today's todo",
-            description = "Todo planned for today",
+            detail = "Todo planned for today",
             plannedDate = today,
             tag = null
         )
@@ -233,7 +233,7 @@ class ListScreenTest {
         val todo = TodoEntity(
             id = 3,
             title = "Yesterday's todo",
-            description = "Todo planned for yesterday",
+            detail = "Todo planned for yesterday",
             plannedDate = yesterday,
             tag = null
         )
@@ -262,7 +262,7 @@ class ListScreenTest {
         val todo = TodoEntity(
             id = 4,
             title = "Tomorrow's todo",
-            description = "Todo planned for tomorrow",
+            detail = "Todo planned for tomorrow",
             plannedDate = tomorrow,
             tag = null
         )

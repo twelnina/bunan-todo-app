@@ -88,7 +88,7 @@ class InitialScrollItemIndexTest {
             TodoEntity(
                 id = id,
                 title = "Todo $id",
-                description = "Description $id",
+                detail = "Description $id",
                 plannedDate = date,
                 tag = null
             )

@@ -52,8 +52,8 @@ import dev.twelnina.bunantodo.R
 import dev.twelnina.bunantodo.data.local.TodoEntity
 import dev.twelnina.bunantodo.model.PlannedDateFilter
 import dev.twelnina.bunantodo.ui.calendar.CalendarScreen
-import dev.twelnina.bunantodo.ui.edit.EditScreen
-import dev.twelnina.bunantodo.ui.entry.AddScreen
+import dev.twelnina.bunantodo.ui.editor.EditorMode
+import dev.twelnina.bunantodo.ui.editor.EditorScreen
 import dev.twelnina.bunantodo.ui.home.HomeScreen
 import dev.twelnina.bunantodo.ui.list.ListScreen
 import dev.twelnina.bunantodo.ui.navigation.AppNavKey
@@ -223,7 +223,9 @@ fun TodoApp(
                                     }
                     ) {
                         val snackbarMessage = stringResource(R.string.todo_snackbar_added)
-                        AddScreen(
+
+                        EditorScreen(
+                            mode = EditorMode.Add,
                             onBack = { backStack.removeLastOrNull() },
                             onSaved = {
                                 backStack.removeLastOrNull()
@@ -242,30 +244,14 @@ fun TodoApp(
                                     }
                     ) { key ->
                         val todoUpdatedMessage = stringResource(R.string.todo_snackbar_updated)
-                        val todoDeletedMessage = stringResource(R.string.todo_snackbar_deleted)
-                        val undoLabel = stringResource(R.string.todo_snackbar_action_undo)
-                        EditScreen(
-                            id = key.id,
+
+                        EditorScreen(
+                            mode = EditorMode.Edit(key.id),
                             onBack = { backStack.removeLastOrNull() },
-                            onUpdated = {
+                            onSaved = {
                                 backStack.removeLastOrNull()
                                 coroutineScope.launch {
                                     snackbarHostState.showSnackbar(todoUpdatedMessage)
-                                }
-                            },
-                            onDeleted = { deletedTodo ->
-                                backStack.removeLastOrNull()
-                                coroutineScope.launch {
-                                    val result = snackbarHostState.showSnackbar(
-                                        message = todoDeletedMessage,
-                                        actionLabel = undoLabel,
-                                        withDismissAction = true,
-                                        duration = SnackbarDuration.Long
-                                    )
-
-                                    if (result == SnackbarResult.ActionPerformed) {
-                                        viewModel.restoreDeletedTodo(deletedTodo)
-                                    }
                                 }
                             }
                         )

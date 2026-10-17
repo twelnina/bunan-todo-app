@@ -40,7 +40,7 @@ class TodoDaoTest {
         val plannedToday = TodoEntity(
             id = 1,
             title = "Planned for today",
-            description = "Should be returned",
+            detail = "Should be returned",
             plannedDate = today,
             tag = null
         )
@@ -48,7 +48,7 @@ class TodoDaoTest {
         val plannedTomorrow = TodoEntity(
             id = 2,
             title = "Planned for tomorrow",
-            description = "Should not be returned",
+            detail = "Should not be returned",
             plannedDate = today.plusDays(1),
             tag = null
         )
@@ -68,7 +68,7 @@ class TodoDaoTest {
         val pastIncomplete = TodoEntity(
             id = 1,
             title = "Earlier task",
-            description = "Should be returned",
+            detail = "Should be returned",
             plannedDate = today.minusDays(1),
             tag = null
         )
@@ -76,7 +76,7 @@ class TodoDaoTest {
         val plannedToday = TodoEntity(
             id = 2,
             title = "Planned for today",
-            description = "Should not be returned",
+            detail = "Should not be returned",
             plannedDate = today,
             tag = null
         )
@@ -84,7 +84,7 @@ class TodoDaoTest {
         val completedEarlier = TodoEntity(
             id = 3,
             title = "Completed earlier task",
-            description = "Should not be returned",
+            detail = "Should not be returned",
             plannedDate = today.minusDays(2),
             tag = null,
             isCompleted = true
