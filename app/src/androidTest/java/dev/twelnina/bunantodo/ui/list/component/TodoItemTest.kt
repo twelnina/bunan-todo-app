@@ -18,7 +18,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.platform.app.InstrumentationRegistry
 import dev.twelnina.bunantodo.R
-import dev.twelnina.bunantodo.data.local.TodoEntity
+import dev.twelnina.bunantodo.model.Todo
 import dev.twelnina.bunantodo.ui.component.TodoItem
 import dev.twelnina.bunantodo.ui.theme.TodoAppTheme
 import org.junit.Assert.assertEquals
@@ -29,7 +29,7 @@ class TodoItemTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val todo = TodoEntity(
+    private val todo = Todo(
         id = 1,
         title = "Study Kotlin",
         detail = "Read Compose documentation",
@@ -52,7 +52,7 @@ class TodoItemTest {
 
     @Test
     fun checkbox_callsOnCheckedChangeWithTodo() {
-        var updatedTodo: TodoEntity? = null
+        var updatedTodo: Todo? = null
         var updatedValue: Boolean? = null
 
         setTodoItem(
@@ -180,7 +180,7 @@ class TodoItemTest {
     private fun setTodoItem(
         daysSincePlannedDate: Long? = null,
         expandedProvider: () -> Boolean = { false },
-        onCheckedChange: (TodoEntity, Boolean) -> Unit = { _, _ -> },
+        onCheckedChange: (Todo, Boolean) -> Unit = { _, _ -> },
         onChangePlannedDate: () -> Unit = {},
         onMoreClick: () -> Unit = {},
         onEdit: () -> Unit = {},

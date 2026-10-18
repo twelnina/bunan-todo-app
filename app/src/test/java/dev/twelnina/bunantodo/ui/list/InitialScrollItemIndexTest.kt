@@ -1,6 +1,6 @@
 package dev.twelnina.bunantodo.ui.list
 
-import dev.twelnina.bunantodo.data.local.TodoEntity
+import dev.twelnina.bunantodo.model.Todo
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
@@ -85,7 +85,7 @@ class InitialScrollItemIndexTest {
     ): TodoDateGroup {
         val todos = List(todoCount) { index ->
             val id = firstTodoId + index
-            TodoEntity(
+            Todo(
                 id = id,
                 title = "Todo $id",
                 detail = "Description $id",

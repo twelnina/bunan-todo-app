@@ -1,7 +1,7 @@
 package dev.twelnina.bunantodo.ui.list
 
-import dev.twelnina.bunantodo.data.local.TodoEntity
 import dev.twelnina.bunantodo.model.PlannedDateFilter
+import dev.twelnina.bunantodo.model.Todo
 import dev.twelnina.bunantodo.model.TodoTag
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -12,7 +12,7 @@ class TodoFilterTest {
     fun `query matches title ignoring case`() {
         val today = LocalDate.of(2026, 9, 12)
 
-        val kotlinTodo = TodoEntity(
+        val kotlinTodo = Todo(
             id = 1,
             title = "Study Kotlin",
             detail = "Read the documentation",
@@ -20,7 +20,7 @@ class TodoFilterTest {
             tag = TodoTag.STUDY
         )
 
-        val shoppingTodo = TodoEntity(
+        val shoppingTodo = Todo(
             id = 2,
             title = "Buy milk",
             detail = "Go to the supermarket",
@@ -43,7 +43,7 @@ class TodoFilterTest {
     fun `query matches description ignoring case`() {
         val today = LocalDate.of(2026, 9, 12)
 
-        val kotlinTodo = TodoEntity(
+        val kotlinTodo = Todo(
             id = 1,
             title = "Study Programming",
             detail = "Read the kotlin documentation",
@@ -51,7 +51,7 @@ class TodoFilterTest {
             tag = TodoTag.STUDY
         )
 
-        val shoppingTodo = TodoEntity(
+        val shoppingTodo = Todo(
             id = 2,
             title = "Buy milk",
             detail = "Go to the supermarket",
@@ -74,7 +74,7 @@ class TodoFilterTest {
     fun `selected tag returns matching todos`() {
         val today = LocalDate.of(2026, 9, 12)
 
-        val workTodo = TodoEntity(
+        val workTodo = Todo(
             id = 1,
             title = "Write report",
             detail = "Prepare the monthly report",
@@ -82,7 +82,7 @@ class TodoFilterTest {
             tag = TodoTag.WORK
         )
 
-        val studyTodo = TodoEntity(
+        val studyTodo = Todo(
             id = 2,
             title = "Study Kotlin",
             detail = "Read the documentation",
@@ -90,7 +90,7 @@ class TodoFilterTest {
             tag = TodoTag.STUDY
         )
 
-        val noTagTodo = TodoEntity(
+        val noTagTodo = Todo(
             id = 3,
             title = "Clean room",
             detail = "Organize the desk",
@@ -113,7 +113,7 @@ class TodoFilterTest {
     fun `multiple selected tags return todos matching any tag`() {
         val today = LocalDate.of(2026, 9, 13)
 
-        val workTodo = TodoEntity(
+        val workTodo = Todo(
             id = 1,
             title = "Write report",
             detail = "Prepare the monthly report",
@@ -121,7 +121,7 @@ class TodoFilterTest {
             tag = TodoTag.WORK
         )
 
-        val studyTodo = TodoEntity(
+        val studyTodo = Todo(
             id = 2,
             title = "Study Kotlin",
             detail = "Read the documentation",
@@ -129,7 +129,7 @@ class TodoFilterTest {
             tag = TodoTag.STUDY
         )
 
-        val shoppingTodo = TodoEntity(
+        val shoppingTodo = Todo(
             id = 3,
             title = "Buy milk",
             detail = "Go to the supermarket",
@@ -152,7 +152,7 @@ class TodoFilterTest {
     fun `today filter returns only todos planned for today`() {
         val today = LocalDate.of(2026, 9, 9)
 
-        val yesterdayTodo = TodoEntity(
+        val yesterdayTodo = Todo(
             id = 1,
             title = "Yesterday task",
             detail = "This task was planned for yesterday",
@@ -160,7 +160,7 @@ class TodoFilterTest {
             tag = TodoTag.WORK
         )
 
-        val todayTodo = TodoEntity(
+        val todayTodo = Todo(
             id = 2,
             title = "Today task",
             detail = "This task is planned for today",
@@ -168,7 +168,7 @@ class TodoFilterTest {
             tag = TodoTag.STUDY
         )
 
-        val tomorrowTodo = TodoEntity(
+        val tomorrowTodo = Todo(
             id = 3,
             title = "Tomorrow task",
             detail = "This task is planned for tomorrow",
@@ -176,7 +176,7 @@ class TodoFilterTest {
             tag = TodoTag.SHOPPING
         )
 
-        val noDateTodo = TodoEntity(
+        val noDateTodo = Todo(
             id = 4,
             title = "Unscheduled task",
             detail = "This task has no planned date",
@@ -204,7 +204,7 @@ class TodoFilterTest {
     fun `tomorrow filter returns only todos planned for tomorrow`() {
         val today = LocalDate.of(2026, 9, 9)
 
-        val todayTodo = TodoEntity(
+        val todayTodo = Todo(
             id = 1,
             title = "Today task",
             detail = "This task is planned for today",
@@ -212,7 +212,7 @@ class TodoFilterTest {
             tag = TodoTag.WORK
         )
 
-        val tomorrowTodo = TodoEntity(
+        val tomorrowTodo = Todo(
             id = 2,
             title = "Tomorrow task",
             detail = "This task is planned for tomorrow",
@@ -220,7 +220,7 @@ class TodoFilterTest {
             tag = TodoTag.STUDY
         )
 
-        val dayAfterTomorrowTodo = TodoEntity(
+        val dayAfterTomorrowTodo = Todo(
             id = 3,
             title = "Day after tomorrow task",
             detail = "This task is planned for in two days",
@@ -228,7 +228,7 @@ class TodoFilterTest {
             tag = TodoTag.SHOPPING
         )
 
-        val noDateTodo = TodoEntity(
+        val noDateTodo = Todo(
             id = 4,
             title = "Unscheduled task",
             detail = "This task has no planned date",
@@ -257,7 +257,7 @@ class TodoFilterTest {
         // It's Wednesday
         val today = LocalDate.of(2026, 9, 9)
 
-        val yesterdayTodo = TodoEntity(
+        val yesterdayTodo = Todo(
             id = 1,
             title = "Yesterday task",
             detail = "This task was planned for yesterday",
@@ -265,7 +265,7 @@ class TodoFilterTest {
             tag = null
         )
 
-        val todayTodo = TodoEntity(
+        val todayTodo = Todo(
             id = 2,
             title = "Today task",
             detail = "This task is planned for today",
@@ -273,7 +273,7 @@ class TodoFilterTest {
             tag = null
         )
 
-        val fridayTodo = TodoEntity(
+        val fridayTodo = Todo(
             id = 3,
             title = "Friday task",
             detail = "This task is planned for on Friday",
@@ -281,7 +281,7 @@ class TodoFilterTest {
             tag = null
         )
 
-        val sundayTodo = TodoEntity(
+        val sundayTodo = Todo(
             id = 4,
             title = "Sunday task",
             detail = "This task is planned for on Sunday",
@@ -289,7 +289,7 @@ class TodoFilterTest {
             tag = null
         )
 
-        val nextMondayTodo = TodoEntity(
+        val nextMondayTodo = Todo(
             id = 5,
             title = "Next Monday task",
             detail = "This task is planned for next week",
@@ -297,7 +297,7 @@ class TodoFilterTest {
             tag = null
         )
 
-        val noDateTodo = TodoEntity(
+        val noDateTodo = Todo(
             id = 6,
             title = "Unscheduled task",
             detail = "This task has no planned date",
@@ -327,7 +327,7 @@ class TodoFilterTest {
     fun `past incomplete filter returns only todos before today`() {
         val today = LocalDate.of(2026, 9, 9)
 
-        val lastWeekTodo = TodoEntity(
+        val lastWeekTodo = Todo(
             id = 1,
             title = "Last week task",
             detail = "This task was planned for last week",
@@ -335,7 +335,7 @@ class TodoFilterTest {
             tag = null
         )
 
-        val yesterdayTodo = TodoEntity(
+        val yesterdayTodo = Todo(
             id = 2,
             title = "Yesterday task",
             detail = "This task was planned for yesterday",
@@ -343,7 +343,7 @@ class TodoFilterTest {
             tag = null
         )
 
-        val todayTodo = TodoEntity(
+        val todayTodo = Todo(
             id = 3,
             title = "Today task",
             detail = "This task is planned for today",
@@ -351,7 +351,7 @@ class TodoFilterTest {
             tag = null
         )
 
-        val tomorrowTodo = TodoEntity(
+        val tomorrowTodo = Todo(
             id = 4,
             title = "Tomorrow task",
             detail = "This task is planned for tomorrow",
@@ -359,7 +359,7 @@ class TodoFilterTest {
             tag = null
         )
 
-        val noDateTodo = TodoEntity(
+        val noDateTodo = Todo(
             id = 5,
             title = "Unscheduled task",
             detail = "This task has no planned date",
@@ -388,7 +388,7 @@ class TodoFilterTest {
     fun `unscheduled filter returns only todos without planned date`() {
         val today = LocalDate.of(2026, 9, 9)
 
-        val pastIncompleteTodo = TodoEntity(
+        val pastIncompleteTodo = Todo(
             id = 1,
             title = "Earlier task",
             detail = "This task was planned for yesterday",
@@ -396,7 +396,7 @@ class TodoFilterTest {
             tag = null
         )
 
-        val todayTodo = TodoEntity(
+        val todayTodo = Todo(
             id = 2,
             title = "Today task",
             detail = "This task is planned for today",
@@ -404,7 +404,7 @@ class TodoFilterTest {
             tag = null
         )
 
-        val futureTodo = TodoEntity(
+        val futureTodo = Todo(
             id = 3,
             title = "Future task",
             detail = "This task is planned for next week",
@@ -412,7 +412,7 @@ class TodoFilterTest {
             tag = null
         )
 
-        val noDateTodo = TodoEntity(
+        val noDateTodo = Todo(
             id = 4,
             title = "Unscheduled task",
             detail = "This task has no planned date",
@@ -440,7 +440,7 @@ class TodoFilterTest {
     fun `all date filter returns dated and undated todos`() {
         val today = LocalDate.of(2026, 9, 9)
 
-        val pastIncompleteTodo = TodoEntity(
+        val pastIncompleteTodo = Todo(
             id = 1,
             title = "Earlier task",
             detail = "This task was planned for yesterday",
@@ -448,7 +448,7 @@ class TodoFilterTest {
             tag = null
         )
 
-        val todayTodo = TodoEntity(
+        val todayTodo = Todo(
             id = 2,
             title = "Today task",
             detail = "This task is planned for today",
@@ -456,7 +456,7 @@ class TodoFilterTest {
             tag = null
         )
 
-        val futureTodo = TodoEntity(
+        val futureTodo = Todo(
             id = 3,
             title = "Future task",
             detail = "This task is planned for next week",
@@ -464,7 +464,7 @@ class TodoFilterTest {
             tag = null
         )
 
-        val noDateTodo = TodoEntity(
+        val noDateTodo = Todo(
             id = 4,
             title = "Unscheduled task",
             detail = "This task has no planned date",
@@ -500,7 +500,7 @@ class TodoFilterTest {
     fun `past incomplete filter excludes completed todos`() {
         val today = LocalDate.of(2026, 9, 23)
 
-        val incompleteTodo = TodoEntity(
+        val incompleteTodo = Todo(
             id = 1,
             title = "Earlier task",
             detail = "",
@@ -529,7 +529,7 @@ class TodoFilterTest {
     fun `combined filters return todos matching every condition`() {
         val today = LocalDate.of(2026, 9, 9)
 
-        val matchingTodo = TodoEntity(
+        val matchingTodo = Todo(
             id = 1,
             title = "Write report",
             detail = "Prepare the monthly summary",
@@ -537,7 +537,7 @@ class TodoFilterTest {
             tag = TodoTag.WORK
         )
 
-        val queryMismatchTodo = TodoEntity(
+        val queryMismatchTodo = Todo(
             id = 2,
             title = "Prepare slides",
             detail = "Create the presentation",
@@ -545,7 +545,7 @@ class TodoFilterTest {
             tag = TodoTag.WORK
         )
 
-        val tagMismatchTodo = TodoEntity(
+        val tagMismatchTodo = Todo(
             id = 3,
             title = "Study report",
             detail = "Read the study materials",
@@ -553,7 +553,7 @@ class TodoFilterTest {
             tag = TodoTag.STUDY
         )
 
-        val dateMismatchTodo = TodoEntity(
+        val dateMismatchTodo = Todo(
             id = 4,
             title = "Future report",
             detail = "Prepare next month's summary",

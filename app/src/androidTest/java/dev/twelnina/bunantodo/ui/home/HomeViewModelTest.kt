@@ -4,8 +4,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import dev.twelnina.bunantodo.data.local.AppDatabase
-import dev.twelnina.bunantodo.data.local.TodoEntity
 import dev.twelnina.bunantodo.data.repository.TodoRepository
+import dev.twelnina.bunantodo.model.Todo
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.first
@@ -45,12 +45,14 @@ class HomeViewModelTest {
         val plannedTomorrow = createTodo(3, nextDate)
         val completedEarlier = createTodo(4, firstDate.minusDays(1), true)
 
-        val dao = database.todoDao()
-        listOf(earlierIncomplete, plannedToday, plannedTomorrow, completedEarlier).forEach { dao.insert(it) }
+        val repository = TodoRepository(database.todoDao())
+        listOf(earlierIncomplete, plannedToday, plannedTomorrow, completedEarlier).forEach {
+            repository.insert(it)
+        }
 
         val dateProvider = FakeCurrentDateProvider(firstDate)
         val viewModel = HomeViewModel(
-            repository = TodoRepository(dao), currentDateProvider = dateProvider
+            repository = repository, currentDateProvider = dateProvider
         )
 
         val collector = launch(start = CoroutineStart.UNDISPATCHED) {
@@ -64,10 +66,12 @@ class HomeViewModelTest {
                 }
                 assertEquals(listOf(plannedToday), before.todayItems)
                 assertEquals(
-                    listOf(
-                        PastIncompleteItem(todo = earlierIncomplete, daysSincePlannedDate = 1L)
-                    ),
+                    listOf(earlierIncomplete),
                     before.pastIncompleteItems
+                )
+                assertEquals(
+                    listOf(1L),
+                    before.pastIncompleteItems.map { it.calculateDaysSincePlannedDate(firstDate) }
                 )
 
                 dateProvider.changeDate(nextDate)
@@ -77,11 +81,12 @@ class HomeViewModelTest {
                 }
                 assertEquals(listOf(plannedTomorrow), after.todayItems)
                 assertEquals(
-                    listOf(
-                        PastIncompleteItem(todo = earlierIncomplete, daysSincePlannedDate = 2L),
-                        PastIncompleteItem(todo = plannedToday, daysSincePlannedDate = 1L)
-                    ),
+                    listOf(earlierIncomplete, plannedToday),
                     after.pastIncompleteItems
+                )
+                assertEquals(
+                    listOf(2L, 1L),
+                    after.pastIncompleteItems.map { it.calculateDaysSincePlannedDate(nextDate) }
                 )
             }
         } finally {
@@ -91,7 +96,7 @@ class HomeViewModelTest {
     }
 
     private fun createTodo(id: Int, plannedDate: LocalDate, isCompleted: Boolean = false) =
-        TodoEntity(
+        Todo(
             id = id,
             title = "Todo $id",
             detail = "",
