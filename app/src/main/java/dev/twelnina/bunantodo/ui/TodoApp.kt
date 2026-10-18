@@ -49,8 +49,8 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import dev.twelnina.bunantodo.R
-import dev.twelnina.bunantodo.data.local.TodoEntity
 import dev.twelnina.bunantodo.model.PlannedDateFilter
+import dev.twelnina.bunantodo.model.Todo
 import dev.twelnina.bunantodo.ui.calendar.CalendarScreen
 import dev.twelnina.bunantodo.ui.editor.EditorMode
 import dev.twelnina.bunantodo.ui.editor.EditorScreen
@@ -70,7 +70,7 @@ fun TodoApp(
     val snackbarHostState = remember { SnackbarHostState() }
     val todoDeletedMessage = stringResource(R.string.todo_snackbar_deleted)
     val undoLabel = stringResource(R.string.todo_snackbar_action_undo)
-    val onTodoDeleted: (TodoEntity) -> Unit = { deletedTodo ->
+    val onTodoDeleted: (Todo) -> Unit = { deletedTodo ->
         coroutineScope.launch {
             val result =
                 snackbarHostState.showSnackbar(

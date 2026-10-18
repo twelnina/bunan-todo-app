@@ -58,7 +58,7 @@ class ListViewModelTest {
             }
 
             val viewModel = ListViewModel(
-                todoRepository = TodoRepository(dao),
+                repository = TodoRepository(dao),
                 currentDateProvider = dateProvider,
                 initialPlannedDateFilter = PlannedDateFilter.TODAY
             )

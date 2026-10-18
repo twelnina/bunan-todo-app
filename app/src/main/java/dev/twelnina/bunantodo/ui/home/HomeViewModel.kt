@@ -3,13 +3,13 @@ package dev.twelnina.bunantodo.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import dev.twelnina.bunantodo.TodoApplication
-import dev.twelnina.bunantodo.data.local.TodoEntity
 import dev.twelnina.bunantodo.data.repository.TodoRepository
 import dev.twelnina.bunantodo.data.time.CurrentDateProvider
+import dev.twelnina.bunantodo.model.Todo
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -17,12 +17,12 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.temporal.ChronoUnit
 
 class HomeViewModel(
     private val repository: TodoRepository,
     private val currentDateProvider: CurrentDateProvider
 ) : ViewModel() {
+    @OptIn(ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<HomeUiState> =
         currentDateProvider.observeDate().flatMapLatest { today ->
             combine(
@@ -32,13 +32,7 @@ class HomeViewModel(
                 HomeUiState(
                     today = today,
                     todayItems = todayItems,
-                    pastIncompleteItems = pastIncompleteItems.map { entity ->
-                        val plannedDate = entity.plannedDate
-                        PastIncompleteItem(
-                            todo = entity,
-                            daysSincePlannedDate = ChronoUnit.DAYS.between(plannedDate, today)
-                        )
-                    }
+                    pastIncompleteItems = pastIncompleteItems
                 )
             }
         }.stateIn(
@@ -47,7 +41,7 @@ class HomeViewModel(
             initialValue = HomeUiState()
         )
 
-    fun updateCompleted(todo: TodoEntity, isCompleted: Boolean) {
+    fun updateCompleted(todo: Todo, isCompleted: Boolean) {
         viewModelScope.launch {
             repository.update(
                 todo.copy(isCompleted = isCompleted)
@@ -55,7 +49,7 @@ class HomeViewModel(
         }
     }
 
-    fun updatePlannedDate(todo: TodoEntity, newPlannedDate: LocalDate) {
+    fun updatePlannedDate(todo: Todo, newPlannedDate: LocalDate) {
         viewModelScope.launch {
             repository.update(
                 todo.copy(plannedDate = newPlannedDate)
@@ -63,7 +57,7 @@ class HomeViewModel(
         }
     }
 
-    fun deleteTodo(todo: TodoEntity, onDeleted: (TodoEntity) -> Unit) {
+    fun deleteTodo(todo: Todo, onDeleted: (Todo) -> Unit) {
         viewModelScope.launch {
             repository.delete(todo)
             onDeleted(todo)

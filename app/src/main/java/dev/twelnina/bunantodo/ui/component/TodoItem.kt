@@ -36,17 +36,17 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.twelnina.bunantodo.R
-import dev.twelnina.bunantodo.data.local.TodoEntity
+import dev.twelnina.bunantodo.model.Todo
 
 @Composable
 fun TodoItem(
     modifier: Modifier = Modifier,
-    todoItemInfo: TodoEntity,
+    todoItemInfo: Todo,
     daysSincePlannedDate: Long? = null,
     index: Int,
     count: Int,
     expanded: Boolean,
-    onCheckedChange: (TodoEntity, Boolean) -> Unit,
+    onCheckedChange: (Todo, Boolean) -> Unit,
     onMoreClick: () -> Unit,
     onChangePlannedDate: () -> Unit,
     onEdit: () -> Unit,

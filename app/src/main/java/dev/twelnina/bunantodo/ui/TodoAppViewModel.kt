@@ -6,15 +6,15 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import dev.twelnina.bunantodo.TodoApplication
-import dev.twelnina.bunantodo.data.local.TodoEntity
 import dev.twelnina.bunantodo.data.repository.TodoRepository
+import dev.twelnina.bunantodo.model.Todo
 import kotlinx.coroutines.launch
 
 class TodoAppViewModel(
     private val todoRepository: TodoRepository
 ) : ViewModel() {
 
-    fun restoreDeletedTodo(todo: TodoEntity) {
+    fun restoreDeletedTodo(todo: Todo) {
         viewModelScope.launch {
             todoRepository.insert(todo)
         }

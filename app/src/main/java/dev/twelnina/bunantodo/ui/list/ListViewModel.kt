@@ -6,10 +6,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import dev.twelnina.bunantodo.TodoApplication
-import dev.twelnina.bunantodo.data.local.TodoEntity
 import dev.twelnina.bunantodo.data.repository.TodoRepository
 import dev.twelnina.bunantodo.data.time.CurrentDateProvider
 import dev.twelnina.bunantodo.model.PlannedDateFilter
+import dev.twelnina.bunantodo.model.Todo
 import dev.twelnina.bunantodo.model.TodoTag
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,7 +23,7 @@ import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters
 
 class ListViewModel(
-    private val todoRepository: TodoRepository,
+    private val repository: TodoRepository,
     private val currentDateProvider: CurrentDateProvider,
     initialPlannedDateFilter: PlannedDateFilter = PlannedDateFilter.ALL
 ) : ViewModel() {
@@ -42,7 +42,7 @@ class ListViewModel(
 
     val uiState: StateFlow<ListUiState> = combine(
         currentDateProvider.observeDate(),
-        todoRepository.observeAllItems(),
+        repository.observeAllItems(),
         _controlsState
     ) { today, items, controls ->
         val filteredTodos = filterTodos(
@@ -108,25 +108,25 @@ class ListViewModel(
         }
     }
 
-    fun updateCompleted(todo: TodoEntity, isCompleted: Boolean) {
+    fun updateCompleted(todo: Todo, isCompleted: Boolean) {
         viewModelScope.launch {
-            todoRepository.update(
+            repository.update(
                 todo.copy(isCompleted = isCompleted)
             )
         }
     }
 
-    fun updatePlannedDate(todo: TodoEntity, newPlannedDate: LocalDate) {
+    fun updatePlannedDate(todo: Todo, newPlannedDate: LocalDate) {
         viewModelScope.launch {
-            todoRepository.update(
+            repository.update(
                 todo.copy(plannedDate = newPlannedDate)
             )
         }
     }
 
-    fun deleteTodo(todo: TodoEntity, onDeleted: (TodoEntity) -> Unit) {
+    fun deleteTodo(todo: Todo, onDeleted: (Todo) -> Unit) {
         viewModelScope.launch {
-            todoRepository.delete(todo)
+            repository.delete(todo)
             onDeleted(todo)
         }
     }
@@ -141,7 +141,7 @@ class ListViewModel(
                 val repository = application.repository
 
                 ListViewModel(
-                    todoRepository = repository,
+                    repository = repository,
                     currentDateProvider = application.currentDateProvider,
                     initialPlannedDateFilter = initialPlannedDateFilter
                 )
@@ -152,12 +152,12 @@ class ListViewModel(
 
 
 internal fun filterTodos(
-    items: List<TodoEntity>,
+    items: List<Todo>,
     query: String,
     tags: Set<TodoTag>,
     plannedDateFilter: PlannedDateFilter,
     today: LocalDate
-): List<TodoEntity> {
+): List<Todo> {
     return items.filter { item ->
         val matchesQuery =
             item.title.contains(query, ignoreCase = true) ||
@@ -189,7 +189,7 @@ internal fun filterTodos(
     }
 }
 
-internal fun groupTodosByDate(todos: List<TodoEntity>): List<TodoDateGroup> {
+internal fun groupTodosByDate(todos: List<Todo>): List<TodoDateGroup> {
     return todos
         .groupBy { todo -> todo.plannedDate }
         .map { (date, todoForDate) ->
