@@ -1,41 +1,37 @@
 package dev.twelnina.bunantodo.ui.editor
 
 import androidx.lifecycle.viewModelScope
+import dev.twelnina.bunantodo.MainDispatcherRule
 import dev.twelnina.bunantodo.data.local.FakeTodoDao
 import dev.twelnina.bunantodo.data.repository.TodoRepository
 import dev.twelnina.bunantodo.data.time.CurrentDateProvider
 import dev.twelnina.bunantodo.model.Todo
 import dev.twelnina.bunantodo.model.TodoTag
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.job
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
-import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import java.time.LocalDate
 import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class EditorViewModelTest {
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     private lateinit var viewModel: EditorViewModel
     private lateinit var repository: TodoRepository
-    private lateinit var dateProvider: CurrentDateProvider
-
-    @Before
-    fun setUp() {
-        Dispatchers.setMain(StandardTestDispatcher())
-    }
 
     @After
     fun tearDown() = runTest(timeout = 10.seconds) {
@@ -104,14 +100,20 @@ class EditorViewModelTest {
 
     @Test
     fun saveTodo_addMode_doesNotSaveBeforeTodayIsLoaded() = runTest {
-        createViewModel(EditorMode.Add)
+        createViewModel(
+            mode = EditorMode.Add,
+            currentDates = MutableSharedFlow<LocalDate>()
+        )
+        runCurrent()
 
         viewModel.updateTitle("Grocery shopping")
         assertNull(viewModel.uiState.value.today)
 
         var savedCount = 0
         viewModel.saveTodo { savedCount++ }
+        runCurrent()
 
+        assertNull(viewModel.uiState.value.today)
         assertNull(repository.getItem(1))
         assertEquals(0, savedCount)
     }
@@ -215,11 +217,13 @@ class EditorViewModelTest {
         assertTrue(state.isTodoMissing)
     }
 
-    private fun createViewModel(mode: EditorMode) {
+    private fun createViewModel(
+        mode: EditorMode,
+        currentDates: Flow<LocalDate> = flowOf(LocalDate.of(2026, 10, 16))
+    ) {
         repository = TodoRepository(FakeTodoDao())
-        dateProvider = object : CurrentDateProvider {
-            override fun observeDate(): Flow<LocalDate> =
-                flowOf(LocalDate.of(2026, 10, 16))
+        val dateProvider = object : CurrentDateProvider {
+            override fun observeDate(): Flow<LocalDate> = currentDates
         }
 
         viewModel = EditorViewModel(

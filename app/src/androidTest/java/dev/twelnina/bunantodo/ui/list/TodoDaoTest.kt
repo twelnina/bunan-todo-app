@@ -6,12 +6,13 @@ import dev.twelnina.bunantodo.data.local.AppDatabase
 import dev.twelnina.bunantodo.data.local.TodoDao
 import dev.twelnina.bunantodo.data.local.TodoEntity
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import java.time.LocalDate
+import kotlin.time.Duration.Companion.seconds
 
 class TodoDaoTest {
     private lateinit var database: AppDatabase
@@ -34,7 +35,7 @@ class TodoDaoTest {
 
 
     @Test
-    fun observeTodayItems_returnsOnlyTodosPlannedToday() = runBlocking {
+    fun observeTodayItems_returnsOnlyTodosPlannedToday() = runTest(timeout = 10.seconds) {
         val today = LocalDate.of(2026, 9, 19)
 
         val plannedToday = TodoEntity(
@@ -62,7 +63,7 @@ class TodoDaoTest {
     }
 
     @Test
-    fun observePastIncompleteItems_returnsOnlyIncompleteTodosBeforeToday() = runBlocking {
+    fun observePastIncompleteItems_returnsOnlyIncompleteTodosBeforeToday() = runTest(timeout = 10.seconds) {
         val today = LocalDate.of(2026, 9, 19)
 
         val pastIncomplete = TodoEntity(
