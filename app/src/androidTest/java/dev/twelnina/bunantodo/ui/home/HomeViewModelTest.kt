@@ -11,14 +11,13 @@ import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import java.time.LocalDate
-import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 class HomeViewModelTest {
     private lateinit var database: AppDatabase
@@ -36,7 +35,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun uiState_updatesItemAndDaysSincePlannedDateWhenDateChanges() = runBlocking {
+    fun uiState_updatesItemAndDaysSincePlannedDateWhenDateChanges() = runTest(timeout = 10.seconds) {
         val firstDate = LocalDate.of(2026, 9, 21)
         val nextDate = firstDate.plusDays(1)
 
@@ -60,35 +59,33 @@ class HomeViewModelTest {
         }
 
         try {
-            withTimeout(5_000.milliseconds) {
-                val before = viewModel.uiState.first {
-                    it.today == firstDate
-                }
-                assertEquals(listOf(plannedToday), before.todayItems)
-                assertEquals(
-                    listOf(earlierIncomplete),
-                    before.pastIncompleteItems
-                )
-                assertEquals(
-                    listOf(1L),
-                    before.pastIncompleteItems.map { it.calculateDaysSincePlannedDate(firstDate) }
-                )
-
-                dateProvider.changeDate(nextDate)
-
-                val after = viewModel.uiState.first {
-                    it.today == nextDate
-                }
-                assertEquals(listOf(plannedTomorrow), after.todayItems)
-                assertEquals(
-                    listOf(earlierIncomplete, plannedToday),
-                    after.pastIncompleteItems
-                )
-                assertEquals(
-                    listOf(2L, 1L),
-                    after.pastIncompleteItems.map { it.calculateDaysSincePlannedDate(nextDate) }
-                )
+            val before = viewModel.uiState.first {
+                it.today == firstDate
             }
+            assertEquals(listOf(plannedToday), before.todayItems)
+            assertEquals(
+                listOf(earlierIncomplete),
+                before.pastIncompleteItems
+            )
+            assertEquals(
+                listOf(1L),
+                before.pastIncompleteItems.map { it.calculateDaysSincePlannedDate(firstDate) }
+            )
+
+            dateProvider.changeDate(nextDate)
+
+            val after = viewModel.uiState.first {
+                it.today == nextDate
+            }
+            assertEquals(listOf(plannedTomorrow), after.todayItems)
+            assertEquals(
+                listOf(earlierIncomplete, plannedToday),
+                after.pastIncompleteItems
+            )
+            assertEquals(
+                listOf(2L, 1L),
+                after.pastIncompleteItems.map { it.calculateDaysSincePlannedDate(nextDate) }
+            )
         } finally {
             collector.cancelAndJoin()
             viewModel.viewModelScope.coroutineContext.job.cancelAndJoin()
