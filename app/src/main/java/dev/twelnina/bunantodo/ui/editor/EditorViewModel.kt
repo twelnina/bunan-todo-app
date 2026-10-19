@@ -6,9 +6,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import dev.twelnina.bunantodo.TodoApplication
-import dev.twelnina.bunantodo.data.local.TodoEntity
 import dev.twelnina.bunantodo.data.repository.TodoRepository
 import dev.twelnina.bunantodo.data.time.CurrentDateProvider
+import dev.twelnina.bunantodo.model.Todo
 import dev.twelnina.bunantodo.model.TodoTag
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,7 +25,7 @@ class EditorViewModel(
     private val _uiState = MutableStateFlow(EditorUiState(isLoading = mode is EditorMode.Edit))
     val uiState: StateFlow<EditorUiState> = _uiState.asStateFlow()
 
-    private var originalTodo: TodoEntity? = null
+    private var originalTodo: Todo? = null
 
     init {
         viewModelScope.launch {
@@ -71,7 +71,7 @@ class EditorViewModel(
             if (!isEntryValid) return
 
             val todo = when (mode) {
-                EditorMode.Add -> TodoEntity(
+                EditorMode.Add -> Todo(
                     title = title,
                     detail = detail,
                     plannedDate = plannedDate,

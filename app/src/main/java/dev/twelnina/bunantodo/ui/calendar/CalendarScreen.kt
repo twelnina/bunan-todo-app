@@ -51,10 +51,9 @@ import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
 import dev.twelnina.bunantodo.R
-import dev.twelnina.bunantodo.data.local.TodoEntity
-import dev.twelnina.bunantodo.ui.component.dialogs.PlannedDatePickerDialog
-import dev.twelnina.bunantodo.ui.elapsedDaysSincePlannedDate
+import dev.twelnina.bunantodo.model.Todo
 import dev.twelnina.bunantodo.ui.component.TodoItem
+import dev.twelnina.bunantodo.ui.component.dialogs.PlannedDatePickerDialog
 import dev.twelnina.bunantodo.ui.rememberMonthDayFormatter
 import dev.twelnina.bunantodo.ui.rememberYearMonthFormatter
 import dev.twelnina.bunantodo.ui.theme.TodoAppTheme
@@ -64,7 +63,7 @@ import java.time.YearMonth
 @Composable
 fun CalendarScreen(
     onEdit: (Int) -> Unit,
-    onDeleted: (TodoEntity) -> Unit,
+    onDeleted: (Todo) -> Unit,
     viewModel: CalendarViewModel = viewModel(factory = CalendarViewModel.Factory)
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -90,10 +89,10 @@ private fun CalendarScreenContent(
     onDateSelected: (LocalDate) -> Unit,
     onPreviousDate: (LocalDate) -> Unit,
     onNextDate: (LocalDate) -> Unit,
-    onCompletedChange: (TodoEntity, Boolean) -> Unit,
-    onPlannedDateChange: (TodoEntity, LocalDate) -> Unit,
+    onCompletedChange: (Todo, Boolean) -> Unit,
+    onPlannedDateChange: (Todo, LocalDate) -> Unit,
     onEdit: (Int) -> Unit,
-    onDelete: (TodoEntity) -> Unit
+    onDelete: (Todo) -> Unit
 ) {
     val today = uiState.today ?: return
     val currentMonth = remember { YearMonth.from(today) }
@@ -160,9 +159,7 @@ private fun CalendarScreenContent(
                 ) { index, todo ->
                     val expanded = expandedTodoId == todo.id
 
-                    val daysSincePlannedDate = today.let { today ->
-                        todo.elapsedDaysSincePlannedDate(today)
-                    }
+                    val daysSincePlannedDate = todo.calculateDaysSincePlannedDate(today)
 
                     TodoItem(
                         todoItemInfo = todo,

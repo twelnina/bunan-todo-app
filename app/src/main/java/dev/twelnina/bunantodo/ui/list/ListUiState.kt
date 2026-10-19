@@ -1,13 +1,13 @@
 package dev.twelnina.bunantodo.ui.list
 
-import dev.twelnina.bunantodo.data.local.TodoEntity
 import dev.twelnina.bunantodo.model.PlannedDateFilter
+import dev.twelnina.bunantodo.model.Todo
 import dev.twelnina.bunantodo.model.TodoTag
 import java.time.LocalDate
 
 data class TodoDateGroup(
     val date: LocalDate?,
-    val todos: List<TodoEntity>
+    val todos: List<Todo>
 )
 
 data class ListUiState(

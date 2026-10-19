@@ -46,12 +46,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.twelnina.bunantodo.R
-import dev.twelnina.bunantodo.data.local.TodoEntity
 import dev.twelnina.bunantodo.model.PlannedDateFilter
+import dev.twelnina.bunantodo.model.Todo
 import dev.twelnina.bunantodo.model.TodoTag
-import dev.twelnina.bunantodo.ui.component.dialogs.PlannedDatePickerDialog
-import dev.twelnina.bunantodo.ui.elapsedDaysSincePlannedDate
 import dev.twelnina.bunantodo.ui.component.TodoItem
+import dev.twelnina.bunantodo.ui.component.dialogs.PlannedDatePickerDialog
 import dev.twelnina.bunantodo.ui.list.component.TodoListControls
 import dev.twelnina.bunantodo.ui.rememberMonthDayFormatter
 import dev.twelnina.bunantodo.ui.theme.TodoAppTheme
@@ -62,7 +61,7 @@ import java.time.LocalDate
 fun ListScreen(
     initialPlannedDateFilter: PlannedDateFilter = PlannedDateFilter.ALL,
     onEdit: (Int) -> Unit,
-    onDeleted: (TodoEntity) -> Unit,
+    onDeleted: (Todo) -> Unit,
     viewModel: ListViewModel = viewModel(
         factory = ListViewModel.createFactory(
             initialPlannedDateFilter
@@ -93,9 +92,9 @@ fun ListScreen(
 @Composable
 internal fun ListScreenContent(
     uiState: ListUiState,
-    onCheckedChange: (TodoEntity, Boolean) -> Unit,
-    onPlannedDateChange: (TodoEntity, LocalDate) -> Unit,
-    onDelete: (TodoEntity) -> Unit,
+    onCheckedChange: (Todo, Boolean) -> Unit,
+    onPlannedDateChange: (Todo, LocalDate) -> Unit,
+    onDelete: (Todo) -> Unit,
     onEdit: (Int) -> Unit,
     onQueryChange: (String) -> Unit,
     onTagSelected: (TodoTag) -> Unit,
@@ -178,8 +177,8 @@ internal fun ListScreenContent(
                     items = group.todos,
                     key = { _, todo -> todo.id }
                 ) { index, todo ->
-                    val daysSincePlannedDate = uiState.today?.let { today ->
-                        todo.elapsedDaysSincePlannedDate(today)
+                    val daysSincePlannedDate = today?.let {
+                        todo.calculateDaysSincePlannedDate(it)
                     }
 
                     val expanded = expandedTodoId == todo.id
@@ -370,7 +369,7 @@ internal fun initialScrollItemIndex(todoGroups: List<TodoDateGroup>, today: Loca
 private fun TodoItemPreview() {
     TodoAppTheme(darkTheme = true) {
         TodoItem(
-            todoItemInfo = TodoEntity(
+            todoItemInfo = Todo(
                 id = 1,
                 title = "Grocery Shopping",
                 detail = "Visit the local farmers market to pick up fresh seasonal vegetables, organic fruits, and the special sourdough bread that the whole family loves for Sunday brunch.",

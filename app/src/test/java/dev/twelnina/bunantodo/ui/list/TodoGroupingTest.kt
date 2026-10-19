@@ -1,6 +1,6 @@
 package dev.twelnina.bunantodo.ui.list
 
-import dev.twelnina.bunantodo.data.local.TodoEntity
+import dev.twelnina.bunantodo.model.Todo
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.time.LocalDate
@@ -51,8 +51,8 @@ class TodoGroupingTest {
     }
 
 
-    private fun createTodo(id: Int, plannedDate: LocalDate?): TodoEntity {
-        return TodoEntity(
+    private fun createTodo(id: Int, plannedDate: LocalDate?): Todo {
+        return Todo(
             id = id,
             title = "Todo $id",
             detail = "Description $id",

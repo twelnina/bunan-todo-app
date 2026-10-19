@@ -4,10 +4,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import dev.twelnina.bunantodo.data.local.AppDatabase
-import dev.twelnina.bunantodo.data.local.TodoEntity
 import dev.twelnina.bunantodo.data.repository.TodoRepository
 import dev.twelnina.bunantodo.data.time.CurrentDateProvider
 import dev.twelnina.bunantodo.model.PlannedDateFilter
+import dev.twelnina.bunantodo.model.Todo
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.Flow
@@ -48,9 +48,9 @@ class ListViewModelTest {
             val plannedToday = createTodo(1, firstDate)
             val plannedTomorrow = createTodo(2, nextDate)
 
-            val dao = database.todoDao()
-            dao.insert(plannedToday)
-            dao.insert(plannedTomorrow)
+            val repository = TodoRepository(database.todoDao())
+            repository.insert(plannedToday)
+            repository.insert(plannedTomorrow)
 
             val currentDate = MutableStateFlow(firstDate)
             val dateProvider = object : CurrentDateProvider {
@@ -58,7 +58,7 @@ class ListViewModelTest {
             }
 
             val viewModel = ListViewModel(
-                todoRepository = TodoRepository(dao),
+                repository = repository,
                 currentDateProvider = dateProvider,
                 initialPlannedDateFilter = PlannedDateFilter.TODAY
             )
@@ -93,8 +93,8 @@ class ListViewModelTest {
             }
         }
 
-    private fun createTodo(id: Int, plannedDate: LocalDate): TodoEntity {
-        return TodoEntity(
+    private fun createTodo(id: Int, plannedDate: LocalDate): Todo {
+        return Todo(
             id = id,
             title = "Todo $id",
             detail = "Description $id",

@@ -39,7 +39,7 @@ interface TodoDao {
     fun observePastIncompleteItems(today: LocalDate): Flow<List<TodoEntity>>
 
     @Query("SELECT * FROM todo_items ORDER BY plannedDate IS NULL ASC, plannedDate ASC, id ASC")
-    fun getAllItem(): Flow<List<TodoEntity>>
+    fun observeAllItem(): Flow<List<TodoEntity>>
 
     @Query("SELECT * FROM todo_items WHERE id = :id")
     suspend fun getItem(id: Int): TodoEntity?

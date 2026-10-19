@@ -1,9 +1,10 @@
 package dev.twelnina.bunantodo.ui.editor
 
 import androidx.lifecycle.viewModelScope
-import dev.twelnina.bunantodo.data.local.TodoEntity
+import dev.twelnina.bunantodo.data.local.FakeTodoDao
 import dev.twelnina.bunantodo.data.repository.TodoRepository
 import dev.twelnina.bunantodo.data.time.CurrentDateProvider
+import dev.twelnina.bunantodo.model.Todo
 import dev.twelnina.bunantodo.model.TodoTag
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,7 +29,7 @@ import kotlin.time.Duration.Companion.seconds
 @OptIn(ExperimentalCoroutinesApi::class)
 class EditorViewModelTest {
     private lateinit var viewModel: EditorViewModel
-    private lateinit var dao: FakeTodoDao
+    private lateinit var repository: TodoRepository
     private lateinit var dateProvider: CurrentDateProvider
 
     @Before
@@ -58,7 +59,7 @@ class EditorViewModelTest {
         viewModel.saveTodo { savedCount++ }
         runCurrent()
 
-        val expected = TodoEntity(
+        val expected = Todo(
             id = 1,
             title = "Grocery shopping",
             detail = "Buy milk and bread",
@@ -67,7 +68,7 @@ class EditorViewModelTest {
             isCompleted = false
         )
 
-        assertEquals(expected, dao.getItem(1))
+        assertEquals(expected, repository.getItem(1))
         assertEquals(1, savedCount)
     }
 
@@ -82,7 +83,7 @@ class EditorViewModelTest {
         viewModel.saveTodo { savedCount++ }
         runCurrent()
 
-        assertNull(dao.getItem(1))
+        assertNull(repository.getItem(1))
         assertEquals(0, savedCount)
     }
 
@@ -97,7 +98,7 @@ class EditorViewModelTest {
         viewModel.saveTodo { savedCount++ }
         runCurrent()
 
-        assertNull(dao.getItem(1))
+        assertNull(repository.getItem(1))
         assertEquals(0, savedCount)
     }
 
@@ -111,7 +112,7 @@ class EditorViewModelTest {
         var savedCount = 0
         viewModel.saveTodo { savedCount++ }
 
-        assertNull(dao.getItem(1))
+        assertNull(repository.getItem(1))
         assertEquals(0, savedCount)
     }
 
@@ -126,7 +127,7 @@ class EditorViewModelTest {
         viewModel.saveTodo { savedCount++ }
         runCurrent()
 
-        val expected = TodoEntity(
+        val expected = Todo(
             id = 1,
             title = "Grocery shopping",
             detail = "",
@@ -135,14 +136,14 @@ class EditorViewModelTest {
             isCompleted = false
         )
 
-        assertEquals(expected, dao.getItem(1))
+        assertEquals(expected, repository.getItem(1))
         assertEquals(1, savedCount)
     }
 
     //    Edit mode
     @Test
     fun uiState_editMode_loadsExistingTodo() = runTest {
-        val existing = TodoEntity(
+        val existing = Todo(
             id = 1,
             title = "Grocery shopping",
             detail = "Buy milk and bread",
@@ -152,7 +153,7 @@ class EditorViewModelTest {
         )
 
         createViewModel(EditorMode.Edit(existing.id))
-        dao.insert(existing)
+        repository.insert(existing)
 
         assertTrue(viewModel.uiState.value.isLoading)
 
@@ -169,7 +170,7 @@ class EditorViewModelTest {
 
     @Test
     fun saveTodo_editMode_updatesInputFieldsAndPreservesIdAndCompletion() = runTest {
-        val existing = TodoEntity(
+        val existing = Todo(
             id = 42,
             title = "Original title",
             detail = "Original detail",
@@ -179,7 +180,7 @@ class EditorViewModelTest {
         )
 
         createViewModel(EditorMode.Edit(existing.id))
-        dao.insert(existing)
+        repository.insert(existing)
         runCurrent()
 
         val newPlannedDate = LocalDate.of(2026, 10, 20)
@@ -200,7 +201,7 @@ class EditorViewModelTest {
             tag = null
         )
 
-        assertEquals(expected, dao.getItem(existing.id))
+        assertEquals(expected, repository.getItem(existing.id))
         assertEquals(1, savedCount)
     }
 
@@ -215,14 +216,14 @@ class EditorViewModelTest {
     }
 
     private fun createViewModel(mode: EditorMode) {
-        dao = FakeTodoDao()
+        repository = TodoRepository(FakeTodoDao())
         dateProvider = object : CurrentDateProvider {
             override fun observeDate(): Flow<LocalDate> =
                 flowOf(LocalDate.of(2026, 10, 16))
         }
 
         viewModel = EditorViewModel(
-            repository = TodoRepository(dao),
+            repository = repository,
             currentDateProvider = dateProvider,
             mode = mode
         )

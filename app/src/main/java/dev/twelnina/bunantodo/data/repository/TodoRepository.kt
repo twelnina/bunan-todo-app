@@ -1,36 +1,45 @@
 package dev.twelnina.bunantodo.data.repository
 
 import dev.twelnina.bunantodo.data.local.TodoDao
-import dev.twelnina.bunantodo.data.local.TodoEntity
+import dev.twelnina.bunantodo.data.local.toEntity
+import dev.twelnina.bunantodo.data.local.toTodo
+import dev.twelnina.bunantodo.model.Todo
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 
 class TodoRepository(private val todoDao: TodoDao) {
-    suspend fun insert(todoEntity: TodoEntity) {
-        todoDao.insert(todoEntity)
+    suspend fun insert(todo: Todo) {
+        todoDao.insert(todo.toEntity())
     }
 
-    suspend fun update(todoEntity: TodoEntity) {
-        todoDao.update(todoEntity)
+    suspend fun update(todo: Todo) {
+        todoDao.update(todo.toEntity())
     }
 
-    suspend fun delete(todoEntity: TodoEntity) {
-        todoDao.delete(todoEntity)
+    suspend fun delete(todo: Todo) {
+        todoDao.delete(todo.toEntity())
     }
 
-    fun getAllItems(): Flow<List<TodoEntity>> {
-        return todoDao.getAllItem()
+    suspend fun getItem(id: Int): Todo? {
+        return todoDao.getItem(id)?.toTodo()
     }
 
-    suspend fun getItem(id: Int): TodoEntity? {
-        return todoDao.getItem(id)
+    fun observeAllItems(): Flow<List<Todo>> {
+        return todoDao.observeAllItem().map { entities ->
+            entities.map { it.toTodo() }
+        }
     }
 
-    fun observeTodayItems(today: LocalDate): Flow<List<TodoEntity>> {
-        return todoDao.observeTodayItems(today)
+    fun observeTodayItems(today: LocalDate): Flow<List<Todo>> {
+        return todoDao.observeTodayItems(today).map { entities ->
+            entities.map { it.toTodo() }
+        }
     }
 
-    fun observePastIncompleteItems(today: LocalDate): Flow<List<TodoEntity>> {
-        return todoDao.observePastIncompleteItems(today)
+    fun observePastIncompleteItems(today: LocalDate): Flow<List<Todo>> {
+        return todoDao.observePastIncompleteItems(today).map { entities ->
+            entities.map { it.toTodo() }
+        }
     }
 }

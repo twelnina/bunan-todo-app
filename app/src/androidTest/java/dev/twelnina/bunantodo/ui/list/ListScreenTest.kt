@@ -11,8 +11,8 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.platform.app.InstrumentationRegistry
 import dev.twelnina.bunantodo.R
-import dev.twelnina.bunantodo.data.local.TodoEntity
 import dev.twelnina.bunantodo.model.PlannedDateFilter
+import dev.twelnina.bunantodo.model.Todo
 import dev.twelnina.bunantodo.model.TodoTag
 import dev.twelnina.bunantodo.ui.theme.TodoAppTheme
 import org.junit.Assert.assertEquals
@@ -27,7 +27,7 @@ class ListScreenTest {
     @Test
     fun displaysTodoFromUiState() {
         val today = LocalDate.of(2026, 9, 26)
-        val todo = TodoEntity(
+        val todo = Todo(
             id = 1,
             title = "Study Kotlin",
             detail = "Read the documentation",
@@ -137,7 +137,7 @@ class ListScreenTest {
 
     @Test
     fun displaysUnscheduledHeaderForTodoWithoutPlannedDate() {
-        val todo = TodoEntity(
+        val todo = Todo(
             id = 2,
             title = "Read a book",
             detail = "Read one chapter",
@@ -162,7 +162,7 @@ class ListScreenTest {
 
     @Test
     fun tappingEditQuickActionCallsOnEditWithTodoId() {
-        val todo = TodoEntity(
+        val todo = Todo(
             id = 42,
             title = "Update project",
             detail = "Review the implementation",
@@ -201,7 +201,7 @@ class ListScreenTest {
     @Test
     fun displaysTodayHeaderForTodoPlannedToday() {
         val today = LocalDate.of(2026, 9, 26)
-        val todo = TodoEntity(
+        val todo = Todo(
             id = 2,
             title = "today's todo",
             detail = "Todo planned for today",
@@ -230,7 +230,7 @@ class ListScreenTest {
     fun displaysYesterdayHeaderForTodoPlannedYesterday() {
         val today = LocalDate.of(2026, 9, 26)
         val yesterday = today.minusDays(1)
-        val todo = TodoEntity(
+        val todo = Todo(
             id = 3,
             title = "Yesterday's todo",
             detail = "Todo planned for yesterday",
@@ -259,7 +259,7 @@ class ListScreenTest {
     fun displaysTomorrowHeaderForTodoPlannedTomorrow() {
         val today = LocalDate.of(2026, 9, 26)
         val tomorrow = today.plusDays(1)
-        val todo = TodoEntity(
+        val todo = Todo(
             id = 4,
             title = "Tomorrow's todo",
             detail = "Todo planned for tomorrow",
@@ -286,9 +286,9 @@ class ListScreenTest {
 
     private fun setListScreenContent(
         uiStateProvider: () -> ListUiState = { ListUiState() },
-        onCheckedChange: (TodoEntity, Boolean) -> Unit = { _, _ -> },
-        onPlannedDateChange: (TodoEntity, LocalDate) -> Unit = { _, _ -> },
-        onDelete: (TodoEntity) -> Unit = {},
+        onCheckedChange: (Todo, Boolean) -> Unit = { _, _ -> },
+        onPlannedDateChange: (Todo, LocalDate) -> Unit = { _, _ -> },
+        onDelete: (Todo) -> Unit = {},
         onEdit: (Int) -> Unit = {},
         onQueryChange: (String) -> Unit = {},
         onTagSelected: (TodoTag) -> Unit = {},

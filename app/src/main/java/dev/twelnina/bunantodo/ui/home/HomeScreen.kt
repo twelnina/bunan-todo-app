@@ -42,9 +42,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.twelnina.bunantodo.R
-import dev.twelnina.bunantodo.data.local.TodoEntity
-import dev.twelnina.bunantodo.ui.component.dialogs.PlannedDatePickerDialog
+import dev.twelnina.bunantodo.model.Todo
 import dev.twelnina.bunantodo.ui.component.TodoItem
+import dev.twelnina.bunantodo.ui.component.dialogs.PlannedDatePickerDialog
 import dev.twelnina.bunantodo.ui.rememberYearMonthDayFormatter
 import dev.twelnina.bunantodo.ui.theme.RobotoFlexExpanded
 import dev.twelnina.bunantodo.ui.theme.TodoAppTheme
@@ -57,7 +57,7 @@ private const val PAST_INCOMPLETE_PREVIEW_LIMIT = 3
 @Composable
 fun HomeScreen(
     onEditTodo: (Int) -> Unit,
-    onDeleted: (TodoEntity) -> Unit,
+    onDeleted: (Todo) -> Unit,
     onSeeAllPastIncomplete: () -> Unit,
     viewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)
 ) {
@@ -80,10 +80,10 @@ fun HomeScreen(
 @Composable
 private fun HomeScreenContent(
     uiState: HomeUiState,
-    onCompletedChange: (TodoEntity, Boolean) -> Unit,
-    onPlannedDateChange: (TodoEntity, LocalDate) -> Unit,
+    onCompletedChange: (Todo, Boolean) -> Unit,
+    onPlannedDateChange: (Todo, LocalDate) -> Unit,
     onEditTodo: (Int) -> Unit,
-    onDelete: (TodoEntity) -> Unit,
+    onDelete: (Todo) -> Unit,
     onSeeAllPastIncomplete: () -> Unit
 ) {
     val today = uiState.today
@@ -111,8 +111,7 @@ private fun HomeScreenContent(
     var dateChangeTodoId by rememberSaveable { mutableStateOf<Int?>(null) }
     val todoForDateChange = dateChangeTodoId?.let { id ->
         uiState.todayItems.firstOrNull { it.id == id }
-            ?: uiState.pastIncompleteItems.firstOrNull { it.todo.id == id }
-                ?.todo
+            ?: uiState.pastIncompleteItems.firstOrNull { it.id == id }
     }
 
     LaunchedEffect(hasItems) {
@@ -274,7 +273,7 @@ private fun HomeScreenContent(
             } else {
                 itemsIndexed(
                     items = visiblePastIncompleteItems,
-                    key = { _, todo -> todo.todo.id }) { index, todo ->
+                    key = { _, todo -> todo.id }) { index, todo ->
 
                     val visibleState = remember {
                         MutableTransitionState(!playInitialAnimation).apply {
@@ -282,7 +281,7 @@ private fun HomeScreenContent(
                         }
                     }
 
-                    val expanded = expandedTodoId == todo.todo.id
+                    val expanded = expandedTodoId == todo.id
 
                     AnimatedVisibility(
                         visibleState = visibleState, enter = fadeIn(
@@ -299,26 +298,26 @@ private fun HomeScreenContent(
                         )
                     ) {
                         TodoItem(
-                            todoItemInfo = todo.todo,
-                            daysSincePlannedDate = todo.daysSincePlannedDate,
+                            todoItemInfo = todo,
+                            daysSincePlannedDate = todo.calculateDaysSincePlannedDate(today),
                             index = index,
                             count = visiblePastIncompleteItems.size,
                             expanded = expanded,
                             onCheckedChange = onCompletedChange,
                             onMoreClick = {
-                                expandedTodoId = if (expanded) null else todo.todo.id
+                                expandedTodoId = if (expanded) null else todo.id
                             },
                             onChangePlannedDate = {
                                 expandedTodoId = null
-                                dateChangeTodoId = todo.todo.id
+                                dateChangeTodoId = todo.id
                             },
                             onEdit = {
                                 expandedTodoId = null
-                                onEditTodo(todo.todo.id)
+                                onEditTodo(todo.id)
                             },
                             onDelete = {
                                 expandedTodoId = null
-                                onDelete(todo.todo)
+                                onDelete(todo)
                             },
                         )
                     }

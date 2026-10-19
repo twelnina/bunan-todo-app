@@ -3,13 +3,12 @@ package dev.twelnina.bunantodo.ui.calendar
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import dev.twelnina.bunantodo.TodoApplication
-import dev.twelnina.bunantodo.data.local.TodoEntity
 import dev.twelnina.bunantodo.data.repository.TodoRepository
 import dev.twelnina.bunantodo.data.time.CurrentDateProvider
+import dev.twelnina.bunantodo.model.Todo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -26,7 +25,7 @@ class CalendarViewModel(
 
     val uiState: StateFlow<CalendarUiState> = combine(
         currentDateProvider.observeDate(),
-        repository.getAllItems(),
+        repository.observeAllItems(),
         _selectedDate
     ) { today, todos, selectedDate ->
         val date = selectedDate ?: today
@@ -67,7 +66,7 @@ class CalendarViewModel(
         }
     }
 
-    fun updateCompleted(todo: TodoEntity, isCompleted: Boolean) {
+    fun updateCompleted(todo: Todo, isCompleted: Boolean) {
         viewModelScope.launch {
             repository.update(
                 todo.copy(isCompleted = isCompleted)
@@ -75,7 +74,7 @@ class CalendarViewModel(
         }
     }
 
-    fun updatePlannedDate(todo: TodoEntity, newPlannedDate: LocalDate) {
+    fun updatePlannedDate(todo: Todo, newPlannedDate: LocalDate) {
         viewModelScope.launch {
             repository.update(
                 todo.copy(plannedDate = newPlannedDate)
@@ -83,7 +82,7 @@ class CalendarViewModel(
         }
     }
 
-    fun deleteTodo(todo: TodoEntity, onDeleted: (TodoEntity) -> Unit) {
+    fun deleteTodo(todo: Todo, onDeleted: (Todo) -> Unit) {
         viewModelScope.launch {
             repository.delete(todo)
             onDeleted(todo)
