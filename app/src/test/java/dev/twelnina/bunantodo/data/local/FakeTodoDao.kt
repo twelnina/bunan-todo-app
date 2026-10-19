@@ -1,7 +1,5 @@
-package dev.twelnina.bunantodo.ui.editor
+package dev.twelnina.bunantodo.data.local
 
-import dev.twelnina.bunantodo.data.local.TodoDao
-import dev.twelnina.bunantodo.data.local.TodoEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
@@ -39,16 +37,16 @@ class FakeTodoDao : TodoDao {
     }
 
     override fun observeTodayItems(today: LocalDate): Flow<List<TodoEntity>> {
-        error("Not used by editor tests")
+        error("Not implemented in FakeTodoDao")
     }
 
     override fun observeAllItem(): Flow<List<TodoEntity>> {
-        error("Not used by editor tests")
+        error("Not implemented in FakeTodoDao")
     }
 
     override suspend fun getItem(id: Int): TodoEntity? = todos.value.find { it.id == id }
 
     override fun observePastIncompleteItems(today: LocalDate): Flow<List<TodoEntity>> {
-        error("Not used by editor tests")
+        error("Not implemented in FakeTodoDao")
     }
 }
