@@ -2,8 +2,8 @@ package dev.twelnina.bunantodo.ui.editor
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -27,6 +27,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.text
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -98,7 +101,7 @@ private fun EditorScreenContent(
                     .navigationBarsPadding()
                     .padding(horizontal = 16.dp)
             ) {
-                Text(stringResource(R.string.todo_editor_action_done))
+                Text(stringResource(R.string.todo_editor_action_save))
             }
         }
     ) { innerPadding ->
@@ -106,7 +109,9 @@ private fun EditorScreenContent(
 
         if (uiState.isTodoMissing) {
             Box(
-                modifier = Modifier.fillMaxSize().padding(innerPadding),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
                 contentAlignment = Alignment.Center
             ) {
                 Text(stringResource(R.string.todo_editor_error_not_found))
@@ -116,7 +121,9 @@ private fun EditorScreenContent(
 
         if (uiState.isLoading || today == null) {
             Box(
-                modifier = Modifier.fillMaxSize().padding(innerPadding),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator()
@@ -131,10 +138,22 @@ private fun EditorScreenContent(
                 .verticalScroll(rememberScrollState())
                 .padding(top = 8.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
         ) {
+            val requiredTitleLabel = stringResource(R.string.todo_editor_field_title_required)
+
             TextField(
                 value = uiState.title,
                 onValueChange = onTitleChange,
-                label = { Text(text = stringResource(R.string.todo_editor_field_title)) },
+                label = {
+                    Text(
+                        text = stringResource(R.string.todo_editor_field_title),
+                        modifier = Modifier.clearAndSetSemantics {
+                            text = AnnotatedString(requiredTitleLabel)
+                        }
+                    )
+                },
+                supportingText = {
+                    Text(text = stringResource(R.string.todo_editor_required_fields_hint))
+                },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 singleLine = true,
                 colors = TextFieldDefaults.colors(
