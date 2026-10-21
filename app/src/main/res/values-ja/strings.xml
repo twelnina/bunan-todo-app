@@ -26,6 +26,7 @@
     <string name="todo_editor_action_delete">削除</string>
     <string name="todo_editor_action_save">保存</string>
     <string name="todo_editor_error_not_found">Todoが見つかりません</string>
+    <string name="todo_editor_error_title_required">タイトルを入力してください</string>
 
     <!-- Todo tags -->
     <string name="todo_tag_study">勉強</string>

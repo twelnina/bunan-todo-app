@@ -23,6 +23,9 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -138,11 +141,17 @@ private fun EditorScreenContent(
                 .verticalScroll(rememberScrollState())
                 .padding(top = 8.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
         ) {
+            var hasEditedTitle by rememberSaveable { mutableStateOf(false) }
+            val isTitleError = hasEditedTitle && uiState.title.isBlank()
+
             val requiredTitleLabel = stringResource(R.string.todo_editor_field_title_required)
 
             TextField(
                 value = uiState.title,
-                onValueChange = onTitleChange,
+                onValueChange = { newTitle ->
+                    hasEditedTitle = true
+                    onTitleChange(newTitle)
+                },
                 label = {
                     Text(
                         text = stringResource(R.string.todo_editor_field_title),
@@ -152,8 +161,14 @@ private fun EditorScreenContent(
                     )
                 },
                 supportingText = {
-                    Text(text = stringResource(R.string.todo_editor_required_fields_hint))
+                    Text(
+                        text = stringResource(
+                            if (isTitleError) R.string.todo_editor_error_title_required
+                            else R.string.todo_editor_required_fields_hint
+                        )
+                    )
                 },
+                isError = isTitleError,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 singleLine = true,
                 colors = TextFieldDefaults.colors(

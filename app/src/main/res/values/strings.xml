@@ -25,6 +25,7 @@
     <string name="todo_editor_action_delete">Delete</string>
     <string name="todo_editor_action_save">Save</string>
     <string name="todo_editor_error_not_found">Todo not found</string>
+    <string name="todo_editor_error_title_required">Enter a title</string>
 
     <!-- Todo tags -->
     <string name="todo_tag_study">Study</string>
