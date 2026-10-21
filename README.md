@@ -113,3 +113,7 @@ Pushing a tag that starts with `v`, or manually running the Release APK workflow
 Actions, builds a signed release APK. Download the generated APK from the `bunan-todo-release-apk`
 artifact in the workflow run. APKs published for users are available from
 [GitHub Releases](https://github.com/twelnina/android-todo-app/releases).
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE).

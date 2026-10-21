@@ -98,3 +98,7 @@ APKは `app/build/outputs/apk/debug/app-debug.apk` に生成されます。接�
 ## リリースAPK
 
 `v`から始まるタグをプッシュするか、GitHub ActionsからRelease APKワークフローを手動で実行すると、署名済みのリリースAPKがビルドされます。生成されたAPKは、ワークフロー実行結果の `bunan-todo-release-apk` アーティファクトからダウンロードできます。利用者向けに公開されたAPKは[GitHub Releases](https://github.com/twelnina/android-todo-app/releases)から入手できます。
+
+## ライセンス
+
+このプロジェクトは [MIT License](./LICENSE) のもとで公開しています。
