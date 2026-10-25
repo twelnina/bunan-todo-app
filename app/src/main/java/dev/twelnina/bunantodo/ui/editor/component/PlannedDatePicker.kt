@@ -20,6 +20,7 @@ import dev.twelnina.bunantodo.R
 import dev.twelnina.bunantodo.ui.theme.TodoAppTheme
 import java.time.Instant
 import java.time.LocalDate
+import java.time.YearMonth
 import java.time.ZoneOffset
 
 @Composable
@@ -31,6 +32,7 @@ fun PlannedDatePicker(
 ) {
     val datePickerState = rememberDatePickerState(
         initialSelectedDate = selectedDate,
+        initialDisplayedMonth = YearMonth.from(selectedDate ?: today),
         selectableDates = object : SelectableDates {
             override fun isSelectableDate(utcTimeMillis: Long): Boolean {
                 val date = Instant
