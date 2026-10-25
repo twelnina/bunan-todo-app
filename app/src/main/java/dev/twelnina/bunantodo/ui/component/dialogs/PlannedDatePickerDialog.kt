@@ -27,6 +27,7 @@ import dev.twelnina.bunantodo.R
 import dev.twelnina.bunantodo.ui.rememberYearMonthDayFormatter
 import java.time.Instant
 import java.time.LocalDate
+import java.time.YearMonth
 import java.time.ZoneOffset
 
 @Composable
@@ -38,6 +39,7 @@ internal fun PlannedDatePickerDialog(
 ) {
     val datePickerState = rememberDatePickerState(
         initialSelectedDate = null,
+        initialDisplayedMonth = YearMonth.from(today),
         selectableDates = object : SelectableDates {
             override fun isSelectableDate(utcTimeMillis: Long): Boolean {
                 val date = Instant
@@ -45,6 +47,10 @@ internal fun PlannedDatePickerDialog(
                     .atZone(ZoneOffset.UTC)
                     .toLocalDate()
                 return date >= today
+            }
+
+            override fun isSelectableYear(year: Int): Boolean {
+                return year >= today.year
             }
         }
     )

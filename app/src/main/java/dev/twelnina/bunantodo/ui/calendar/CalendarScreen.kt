@@ -95,7 +95,7 @@ private fun CalendarScreenContent(
     onDelete: (Todo) -> Unit
 ) {
     val today = uiState.today ?: return
-    val currentMonth = remember { YearMonth.from(today) }
+    val currentMonth = remember(today) { YearMonth.from(today) }
     val startMonth = remember(currentMonth) { currentMonth.minusMonths(12) }
     val endMonth = remember(currentMonth) { currentMonth.plusMonths(12) }
     val minDate = startMonth.atDay(1)
@@ -113,6 +113,7 @@ private fun CalendarScreenContent(
 
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         MonthCalendar(
+            today = uiState.today,
             selectedDate = selectedDate,
             startMonth = startMonth,
             endMonth = endMonth,
@@ -219,13 +220,14 @@ private fun CalendarScreenContent(
 
 @Composable
 private fun MonthCalendar(
+    today: LocalDate,
     selectedDate: LocalDate?,
     startMonth: YearMonth,
     endMonth: YearMonth,
     todoCountsByDate: Map<LocalDate, Int>,
     onDateSelected: (LocalDate) -> Unit
 ) {
-    val currentMonth = remember { YearMonth.now() }
+    val currentMonth = remember(today) { YearMonth.from(today) }
     val daysOfWeek = remember { daysOfWeek() }
 
     val state = rememberCalendarState(
@@ -276,6 +278,7 @@ private fun MonthCalendar(
                 state = state,
                 dayContent = { day ->
                     CalendarItem(
+                        today = today,
                         day = day,
                         isSelected = day.date == selectedDate,
                         todoCount = todoCountsByDate[day.date] ?: 0,
@@ -289,6 +292,7 @@ private fun MonthCalendar(
 
 @Composable
 private fun CalendarItem(
+    today: LocalDate,
     day: CalendarDay,
     isSelected: Boolean,
     todoCount: Int,
@@ -305,7 +309,7 @@ private fun CalendarItem(
 
     val textColor = when {
         highlighted -> MaterialTheme.colorScheme.onPrimary
-        day.date == LocalDate.now() -> MaterialTheme.colorScheme.primary
+        day.date == today -> MaterialTheme.colorScheme.primary
         else -> MaterialTheme.colorScheme.onSurfaceVariant
     }
 
@@ -366,6 +370,7 @@ private fun MonthCalendarPreview() {
 
     TodoAppTheme {
         MonthCalendar(
+            today = LocalDate.now(),
             selectedDate = currentMonth.atDay(22),
             startMonth = currentMonth.minusMonths(12),
             endMonth = currentMonth.plusMonths(12),
