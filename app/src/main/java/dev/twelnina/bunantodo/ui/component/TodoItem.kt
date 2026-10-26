@@ -42,7 +42,7 @@ import dev.twelnina.bunantodo.model.Todo
 fun TodoItem(
     modifier: Modifier = Modifier,
     todoItemInfo: Todo,
-    daysSincePlannedDate: Long? = null,
+    overdueDays: Long? = null,
     index: Int,
     count: Int,
     expanded: Boolean,
@@ -134,8 +134,8 @@ fun TodoItem(
                 },
             ) {
                 Column {
-                    daysSincePlannedDate?.let { elapsedDays ->
-                        val days = elapsedDays.toInt()
+                    overdueDays?.let { daysOverdue ->
+                        val days = daysOverdue.toInt()
 
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -149,7 +149,7 @@ fun TodoItem(
                             )
                             Text(
                                 text = pluralStringResource(
-                                    R.plurals.todo_item_status_days_since_planned_date,
+                                    R.plurals.todo_item_status_overdue_days,
                                     days, days,
                                 ),
                                 color = MaterialTheme.colorScheme.onErrorContainer,

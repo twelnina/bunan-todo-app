@@ -22,7 +22,7 @@ Bunan Todo requires Android 10 (API 29) or later.
 
 ## About Bunan Todo
 
-Bunan Todo is a task management app that keeps today's todos and overdue unfinished todos within
+Bunan Todo is a task management app that keeps today's todos and overdue todos within
 easy reach. Organize todos by planned date and tag, then switch between Home, List, and Calendar
 views to focus on what you need.
 
@@ -36,12 +36,12 @@ can work together in a small, approachable app.
 
 - **Todo management** — Create, edit, delete, and complete todos with a title, description, planned
   date, and tag.
-- **Today at a glance** — View today's todos separately from overdue unfinished todos, and
+- **Today at a glance** — View today's todos separately from overdue todos, and
   reschedule overdue items directly from the Home screen.
 - **Search and filters** — Search titles and descriptions, select multiple tags, and filter todos by
   planned date.
 - **Date-based list** — Browse todos grouped by date and quickly switch between All, Today,
-  Tomorrow, This week, Past unfinished, and Unscheduled views.
+  Tomorrow, This week, Overdue, and Unscheduled views.
 - **Calendar view** — See the number of todos on each day of the month and view the todos scheduled
   for a selected date.
 - **Five tags** — Organize todos as Study, Work, Health, Hobby, or Shopping.

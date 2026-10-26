@@ -47,9 +47,9 @@
     </string-array>
     <string name="home_section_today_title">Today(%d)</string>
     <string name="home_empty_message_today">No todos planned for today</string>
-    <string name="home_section_past_incomplete_title">Past unfinished(%d)</string>
+    <string name="home_section_overdue_title">Overdue(%d)</string>
     <string name="home_action_see_all">See all</string>
-    <string name="home_empty_message_past_incomplete">No unfinished todos from earlier days</string>
+    <string name="home_empty_message_overdue">No overdue todos</string>
 
     <!-- Calendar screen -->
     <string name="calendar_action_previous_date">Previous day</string>
@@ -63,7 +63,7 @@
     <string name="todo_list_filter_today">Today</string>
     <string name="todo_list_filter_tomorrow">Tomorrow</string>
     <string name="todo_list_filter_this_week">This week</string>
-    <string name="todo_list_filter_past_incomplete">Past unfinished</string>
+    <string name="todo_list_filter_overdue">Overdue</string>
     <string name="todo_list_filter_unscheduled">Unscheduled</string>
 
     <string name="todo_list_header_yesterday">Yesterday</string>
@@ -71,9 +71,9 @@
     <string name="todo_list_header_tomorrow">Tomorrow</string>
 
     <!-- Todo item -->
-    <plurals name="todo_item_status_days_since_planned_date">
-        <item quantity="one">Planned %d day ago</item>
-        <item quantity="other">Planned %d days ago</item>
+    <plurals name="todo_item_status_overdue_days">
+        <item quantity="one">%d day overdue</item>
+        <item quantity="other">%d days overdue</item>
     </plurals>
 
     <string name="todo_item_action_more_options">More options</string>

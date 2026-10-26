@@ -16,6 +16,6 @@ enum class PlannedDateFilter(@get:StringRes val labelRes: Int) {
     TODAY(R.string.todo_list_filter_today),
     TOMORROW(R.string.todo_list_filter_tomorrow),
     THIS_WEEK(R.string.todo_list_filter_this_week),
-    PAST_INCOMPLETE(R.string.todo_list_filter_past_incomplete),
+    OVERDUE(R.string.todo_list_filter_overdue),
     UNSCHEDULED(R.string.todo_list_filter_unscheduled)
 }

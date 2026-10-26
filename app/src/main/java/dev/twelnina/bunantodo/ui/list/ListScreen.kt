@@ -177,15 +177,15 @@ internal fun ListScreenContent(
                     items = group.todos,
                     key = { _, todo -> todo.id }
                 ) { index, todo ->
-                    val daysSincePlannedDate = today?.let {
-                        todo.calculateDaysSincePlannedDate(it)
+                    val overdueDays = today?.let {
+                        todo.calculateOverdueDays(it)
                     }
 
                     val expanded = expandedTodoId == todo.id
 
                     TodoItem(
                         todoItemInfo = todo,
-                        daysSincePlannedDate = daysSincePlannedDate,
+                        overdueDays = overdueDays,
                         index = index,
                         count = group.todos.size,
                         expanded = expanded,

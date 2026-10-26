@@ -160,11 +160,11 @@ private fun CalendarScreenContent(
                 ) { index, todo ->
                     val expanded = expandedTodoId == todo.id
 
-                    val daysSincePlannedDate = todo.calculateDaysSincePlannedDate(today)
+                    val overdueDays = todo.calculateOverdueDays(today)
 
                     TodoItem(
                         todoItemInfo = todo,
-                        daysSincePlannedDate = daysSincePlannedDate,
+                        overdueDays = overdueDays,
                         index = index,
                         count = uiState.selectedDateTodos.size,
                         expanded = expanded,

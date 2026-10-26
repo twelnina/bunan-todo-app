@@ -27,12 +27,12 @@ class HomeViewModel(
         currentDateProvider.observeDate().flatMapLatest { today ->
             combine(
                 repository.observeTodayItems(today),
-                repository.observePastIncompleteItems(today)
-            ) { todayItems, pastIncompleteItems ->
+                repository.observeOverdueItems(today)
+            ) { todayItems, overdueItems ->
                 HomeUiState(
                     today = today,
                     todayItems = todayItems,
-                    pastIncompleteItems = pastIncompleteItems
+                    overdueItems = overdueItems
                 )
             }
         }.stateIn(

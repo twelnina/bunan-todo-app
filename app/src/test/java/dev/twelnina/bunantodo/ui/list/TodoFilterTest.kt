@@ -324,7 +324,7 @@ class TodoFilterTest {
     }
 
     @Test
-    fun `past incomplete filter returns only todos before today`() {
+    fun `overdue filter returns only todos before today`() {
         val today = LocalDate.of(2026, 9, 9)
 
         val lastWeekTodo = Todo(
@@ -377,7 +377,7 @@ class TodoFilterTest {
             ),
             query = "",
             tags = emptySet(),
-            plannedDateFilter = PlannedDateFilter.PAST_INCOMPLETE,
+            plannedDateFilter = PlannedDateFilter.OVERDUE,
             today = today
         )
 
@@ -388,9 +388,9 @@ class TodoFilterTest {
     fun `unscheduled filter returns only todos without planned date`() {
         val today = LocalDate.of(2026, 9, 9)
 
-        val pastIncompleteTodo = Todo(
+        val overdueTodo = Todo(
             id = 1,
-            title = "Earlier task",
+            title = "Overdue task",
             detail = "This task was planned for yesterday",
             plannedDate = today.minusDays(1),
             tag = null
@@ -422,7 +422,7 @@ class TodoFilterTest {
 
         val result = filterTodos(
             items = listOf(
-                pastIncompleteTodo,
+                overdueTodo,
                 todayTodo,
                 futureTodo,
                 noDateTodo
@@ -440,9 +440,9 @@ class TodoFilterTest {
     fun `all date filter returns dated and undated todos`() {
         val today = LocalDate.of(2026, 9, 9)
 
-        val pastIncompleteTodo = Todo(
+        val overdueTodo = Todo(
             id = 1,
-            title = "Earlier task",
+            title = "Overdue task",
             detail = "This task was planned for yesterday",
             plannedDate = today.minusDays(1),
             tag = null
@@ -474,7 +474,7 @@ class TodoFilterTest {
 
         val result = filterTodos(
             items = listOf(
-                pastIncompleteTodo,
+                overdueTodo,
                 todayTodo,
                 futureTodo,
                 noDateTodo
@@ -487,7 +487,7 @@ class TodoFilterTest {
 
         assertEquals(
             listOf(
-                pastIncompleteTodo,
+                overdueTodo,
                 todayTodo,
                 futureTodo,
                 noDateTodo
@@ -497,32 +497,32 @@ class TodoFilterTest {
     }
 
     @Test
-    fun `past incomplete filter excludes completed todos`() {
+    fun `overdue filter excludes completed todos`() {
         val today = LocalDate.of(2026, 9, 23)
 
-        val incompleteTodo = Todo(
+        val overdueTodo = Todo(
             id = 1,
-            title = "Earlier task",
+            title = "Overdue task",
             detail = "",
             plannedDate = today.minusDays(1),
             tag = null,
             isCompleted = false
         )
 
-        val completedTodo = incompleteTodo.copy(
+        val completedTodo = overdueTodo.copy(
             id = 2,
             isCompleted = true
         )
 
         val result = filterTodos(
-            items = listOf(incompleteTodo, completedTodo),
+            items = listOf(overdueTodo, completedTodo),
             query = "",
             tags = emptySet(),
-            plannedDateFilter = PlannedDateFilter.PAST_INCOMPLETE,
+            plannedDateFilter = PlannedDateFilter.OVERDUE,
             today = today
         )
 
-        assertEquals(listOf(incompleteTodo), result)
+        assertEquals(listOf(overdueTodo), result)
     }
 
     @Test

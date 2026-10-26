@@ -35,17 +35,17 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun uiState_updatesItemAndDaysSincePlannedDateWhenDateChanges() = runTest(timeout = 10.seconds) {
+    fun uiState_updatesItemAndOverdueDaysWhenDateChanges() = runTest(timeout = 10.seconds) {
         val firstDate = LocalDate.of(2026, 9, 21)
         val nextDate = firstDate.plusDays(1)
 
-        val earlierIncomplete = createTodo(1, firstDate.minusDays(1))
+        val overdueTodo = createTodo(1, firstDate.minusDays(1))
         val plannedToday = createTodo(2, firstDate)
         val plannedTomorrow = createTodo(3, nextDate)
         val completedEarlier = createTodo(4, firstDate.minusDays(1), true)
 
         val repository = TodoRepository(database.todoDao())
-        listOf(earlierIncomplete, plannedToday, plannedTomorrow, completedEarlier).forEach {
+        listOf(overdueTodo, plannedToday, plannedTomorrow, completedEarlier).forEach {
             repository.insert(it)
         }
 
@@ -64,12 +64,12 @@ class HomeViewModelTest {
             }
             assertEquals(listOf(plannedToday), before.todayItems)
             assertEquals(
-                listOf(earlierIncomplete),
-                before.pastIncompleteItems
+                listOf(overdueTodo),
+                before.overdueItems
             )
             assertEquals(
                 listOf(1L),
-                before.pastIncompleteItems.map { it.calculateDaysSincePlannedDate(firstDate) }
+                before.overdueItems.map { it.calculateOverdueDays(firstDate) }
             )
 
             dateProvider.changeDate(nextDate)
@@ -79,12 +79,12 @@ class HomeViewModelTest {
             }
             assertEquals(listOf(plannedTomorrow), after.todayItems)
             assertEquals(
-                listOf(earlierIncomplete, plannedToday),
-                after.pastIncompleteItems
+                listOf(overdueTodo, plannedToday),
+                after.overdueItems
             )
             assertEquals(
                 listOf(2L, 1L),
-                after.pastIncompleteItems.map { it.calculateDaysSincePlannedDate(nextDate) }
+                after.overdueItems.map { it.calculateOverdueDays(nextDate) }
             )
         } finally {
             collector.cancelAndJoin()

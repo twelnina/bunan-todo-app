@@ -185,11 +185,11 @@ fun TodoApp(
                                 backStack.add(AppNavKey.EditTodo(id))
                             },
                             onDeleted = onTodoDeleted,
-                            onSeeAllPastIncomplete = {
+                            onSeeAllOverdue = {
                                 snackbarHostState.currentSnackbarData?.dismiss()
                                 backStack.navigateToTopLevel(
                                     AppNavKey.TodoList(
-                                        initialPlannedDateFilter = PlannedDateFilter.PAST_INCOMPLETE
+                                        initialPlannedDateFilter = PlannedDateFilter.OVERDUE
                                     )
                                 )
                             }

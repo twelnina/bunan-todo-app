@@ -46,7 +46,7 @@ class FakeTodoDao : TodoDao {
 
     override suspend fun getItem(id: Int): TodoEntity? = todos.value.find { it.id == id }
 
-    override fun observePastIncompleteItems(today: LocalDate): Flow<List<TodoEntity>> {
+    override fun observeOverdueItems(today: LocalDate): Flow<List<TodoEntity>> {
         error("Not implemented in FakeTodoDao")
     }
 }
