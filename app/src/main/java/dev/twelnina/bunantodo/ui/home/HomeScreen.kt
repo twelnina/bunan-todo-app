@@ -133,8 +133,9 @@ private fun HomeScreenContent(
             item(key = "home-header") {
                 val now = LocalDateTime.now()
                 Column(
-                    modifier = Modifier.height(200.dp),
-                    verticalArrangement = Arrangement.Center
+                    modifier = Modifier.fillMaxWidth().height(200.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
                         text = today.format(rememberYearMonthDayFormatter()),
@@ -150,7 +151,8 @@ private fun HomeScreenContent(
                             dayKey = today.toEpochDay()
                         ),
                         fontFamily = RobotoFlexExpanded,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center
                     )
                 }
             }
