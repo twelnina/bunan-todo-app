@@ -48,9 +48,9 @@
     </string-array>
     <string name="home_section_today_title">今日（%d件）</string>
     <string name="home_empty_message_today">今日予定されているTodoはありません</string>
-    <string name="home_section_past_incomplete_title">過去の未完了（%d件）</string>
+    <string name="home_section_overdue_title">予定日超過（%d件）</string>
     <string name="home_action_see_all">すべて見る</string>
-    <string name="home_empty_message_past_incomplete">以前の日の未完了Todoはありません</string>
+    <string name="home_empty_message_overdue">予定日を過ぎた未完了のTodoはありません</string>
 
     <!-- Calendar screen -->
     <string name="calendar_action_previous_date">前の日へ</string>
@@ -64,7 +64,7 @@
     <string name="todo_list_filter_today">今日</string>
     <string name="todo_list_filter_tomorrow">明日</string>
     <string name="todo_list_filter_this_week">今週</string>
-    <string name="todo_list_filter_past_incomplete">過去の未完了</string>
+    <string name="todo_list_filter_overdue">予定日超過</string>
     <string name="todo_list_filter_unscheduled">予定なし</string>
 
     <string name="todo_list_header_yesterday">昨日</string>
@@ -72,8 +72,8 @@
     <string name="todo_list_header_tomorrow">明日</string>
 
     <!-- Todo item -->
-    <plurals name="todo_item_status_days_since_planned_date">
-        <item quantity="other">予定日から%d日経過</item>
+    <plurals name="todo_item_status_overdue_days">
+        <item quantity="other">予定日を%d日超過</item>
     </plurals>
 
     <string name="todo_item_action_more_options">その他のオプション</string>

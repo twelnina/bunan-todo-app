@@ -179,7 +179,7 @@ internal fun filterTodos(
                 } ?: false
             }
 
-            PlannedDateFilter.PAST_INCOMPLETE -> !item.isCompleted &&
+            PlannedDateFilter.OVERDUE -> !item.isCompleted &&
                     (item.plannedDate?.isBefore(today) ?: false)
 
             PlannedDateFilter.UNSCHEDULED -> item.plannedDate == null

@@ -37,8 +37,8 @@ class TodoRepository(private val todoDao: TodoDao) {
         }
     }
 
-    fun observePastIncompleteItems(today: LocalDate): Flow<List<Todo>> {
-        return todoDao.observePastIncompleteItems(today).map { entities ->
+    fun observeOverdueItems(today: LocalDate): Flow<List<Todo>> {
+        return todoDao.observeOverdueItems(today).map { entities ->
             entities.map { it.toTodo() }
         }
     }

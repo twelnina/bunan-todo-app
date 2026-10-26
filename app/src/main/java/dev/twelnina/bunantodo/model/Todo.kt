@@ -11,7 +11,7 @@ data class Todo(
     val tag: TodoTag?,
     val isCompleted: Boolean = false
 ) {
-    fun calculateDaysSincePlannedDate(today: LocalDate): Long? {
+    fun calculateOverdueDays(today: LocalDate): Long? {
         val date = plannedDate ?: return null
 
         if (isCompleted || !date.isBefore(today)) {

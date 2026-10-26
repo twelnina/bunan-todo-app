@@ -130,15 +130,15 @@ class TodoItemTest {
     }
 
     @Test
-    fun daysSincePlannedDate_displaysElapsedDays() {
+    fun overdueDays_displaysOverdueDays() {
         val days = 7
 
-        setTodoItem(daysSincePlannedDate = days.toLong())
+        setTodoItem(overdueDays = days.toLong())
 
         composeTestRule
             .onNodeWithText(
                 getQuantityString(
-                    R.plurals.todo_item_status_days_since_planned_date,
+                    R.plurals.todo_item_status_overdue_days,
                     days, days
                 )
             )
@@ -146,15 +146,15 @@ class TodoItemTest {
     }
 
     @Test
-    fun daysSincePlannedDate_displaysSingularDay() {
+    fun overdueDays_displaysSingularDay() {
         val days = 1
 
-        setTodoItem(daysSincePlannedDate = days.toLong())
+        setTodoItem(overdueDays = days.toLong())
 
         composeTestRule
             .onNodeWithText(
                 getQuantityString(
-                    R.plurals.todo_item_status_days_since_planned_date,
+                    R.plurals.todo_item_status_overdue_days,
                     days, days
                 )
             )
@@ -162,15 +162,15 @@ class TodoItemTest {
     }
 
     @Test
-    fun daysSincePlannedDate_whenNull_doesNotDisplayStatus() {
+    fun overdueDays_whenNull_doesNotDisplayStatus() {
         val days = 1
 
-        setTodoItem(daysSincePlannedDate = null)
+        setTodoItem(overdueDays = null)
 
         composeTestRule
             .onNodeWithText(
                 getQuantityString(
-                    R.plurals.todo_item_status_days_since_planned_date,
+                    R.plurals.todo_item_status_overdue_days,
                     days, days
                 )
             )
@@ -178,7 +178,7 @@ class TodoItemTest {
     }
 
     private fun setTodoItem(
-        daysSincePlannedDate: Long? = null,
+        overdueDays: Long? = null,
         expandedProvider: () -> Boolean = { false },
         onCheckedChange: (Todo, Boolean) -> Unit = { _, _ -> },
         onChangePlannedDate: () -> Unit = {},
@@ -190,7 +190,7 @@ class TodoItemTest {
             TodoAppTheme {
                 TodoItem(
                     todoItemInfo = todo,
-                    daysSincePlannedDate = daysSincePlannedDate,
+                    overdueDays = overdueDays,
                     index = 0,
                     count = 1,
                     expanded = expandedProvider(),

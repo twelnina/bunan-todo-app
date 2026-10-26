@@ -63,12 +63,12 @@ class TodoDaoTest {
     }
 
     @Test
-    fun observePastIncompleteItems_returnsOnlyIncompleteTodosBeforeToday() = runTest(timeout = 10.seconds) {
+    fun observeOverdueItems_returnsOnlyIncompleteTodosBeforeToday() = runTest(timeout = 10.seconds) {
         val today = LocalDate.of(2026, 9, 19)
 
-        val pastIncomplete = TodoEntity(
+        val overdueTodo = TodoEntity(
             id = 1,
-            title = "Earlier task",
+            title = "Overdue task",
             detail = "Should be returned",
             plannedDate = today.minusDays(1),
             tag = null
@@ -91,12 +91,12 @@ class TodoDaoTest {
             isCompleted = true
         )
 
-        todoDao.insert(pastIncomplete)
+        todoDao.insert(overdueTodo)
         todoDao.insert(plannedToday)
         todoDao.insert(completedEarlier)
 
-        val actual = todoDao.observePastIncompleteItems(today).first()
+        val actual = todoDao.observeOverdueItems(today).first()
 
-        assertEquals(listOf(pastIncomplete), actual)
+        assertEquals(listOf(overdueTodo), actual)
     }
 }

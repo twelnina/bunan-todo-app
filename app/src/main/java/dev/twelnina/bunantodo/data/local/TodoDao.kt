@@ -36,7 +36,7 @@ interface TodoDao {
       ORDER BY plannedDate ASC, id ASC
   """
     )
-    fun observePastIncompleteItems(today: LocalDate): Flow<List<TodoEntity>>
+    fun observeOverdueItems(today: LocalDate): Flow<List<TodoEntity>>
 
     @Query("SELECT * FROM todo_items ORDER BY plannedDate IS NULL ASC, plannedDate ASC, id ASC")
     fun observeAllItem(): Flow<List<TodoEntity>>
