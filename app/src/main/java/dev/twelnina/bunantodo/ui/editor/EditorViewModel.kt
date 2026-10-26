@@ -62,7 +62,9 @@ class EditorViewModel(
 
     fun updateSelectedTag(newSelectedTag: TodoTag?) {
         _uiState.update { currentState ->
-            currentState.copy(selectedTag = newSelectedTag)
+            currentState.copy(
+                selectedTag = if (newSelectedTag == currentState.selectedTag) null else newSelectedTag
+            )
         }
     }
 
@@ -72,20 +74,14 @@ class EditorViewModel(
 
             val todo = when (mode) {
                 EditorMode.Add -> Todo(
-                    title = title,
-                    detail = detail,
-                    plannedDate = plannedDate,
-                    tag = selectedTag
+                    title = title, detail = detail, plannedDate = plannedDate, tag = selectedTag
                 )
 
                 is EditorMode.Edit -> {
                     val original = originalTodo ?: return
 
                     original.copy(
-                        title = title,
-                        detail = detail,
-                        plannedDate = plannedDate,
-                        tag = selectedTag
+                        title = title, detail = detail, plannedDate = plannedDate, tag = selectedTag
                     )
                 }
             }

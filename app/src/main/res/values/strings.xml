@@ -21,8 +21,8 @@
     <string name="todo_editor_required_fields_hint">*required</string>
     <string name="todo_editor_field_detail">Detail</string>
     <string name="todo_editor_section_planned_date">Planned date</string>
+    <string name="todo_editor_field_clear_planned_date">Clear</string>
     <string name="todo_editor_section_tags">Tags</string>
-    <string name="todo_editor_action_delete">Delete</string>
     <string name="todo_editor_action_save">Save</string>
     <string name="todo_editor_error_not_found">Todo not found</string>
     <string name="todo_editor_error_title_required">Enter a title</string>

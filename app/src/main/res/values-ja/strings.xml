@@ -22,8 +22,8 @@
     <string name="todo_editor_required_fields_hint">*必須</string>
     <string name="todo_editor_field_detail">詳細</string>
     <string name="todo_editor_section_planned_date">予定日</string>
+    <string name="todo_editor_field_clear_planned_date">クリア</string>
     <string name="todo_editor_section_tags">タグ</string>
-    <string name="todo_editor_action_delete">削除</string>
     <string name="todo_editor_action_save">保存</string>
     <string name="todo_editor_error_not_found">Todoが見つかりません</string>
     <string name="todo_editor_error_title_required">タイトルを入力してください</string>
