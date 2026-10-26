@@ -1,5 +1,8 @@
 package dev.twelnina.bunantodo.ui.editor.component
 
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
@@ -7,10 +10,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.getSelectedDate
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.setSelectedDate
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -35,10 +41,7 @@ fun PlannedDatePicker(
         initialDisplayedMonth = YearMonth.from(selectedDate ?: today),
         selectableDates = object : SelectableDates {
             override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                val date = Instant
-                    .ofEpochMilli(utcTimeMillis)
-                    .atZone(ZoneOffset.UTC)
-                    .toLocalDate()
+                val date = Instant.ofEpochMilli(utcTimeMillis).atZone(ZoneOffset.UTC).toLocalDate()
 
                 return date >= today
             }
@@ -46,8 +49,7 @@ fun PlannedDatePicker(
             override fun isSelectableYear(year: Int): Boolean {
                 return year >= today.year
             }
-        }
-    )
+        })
     val pickedDate = datePickerState.getSelectedDate()
 
     LaunchedEffect(pickedDate) {
@@ -59,36 +61,44 @@ fun PlannedDatePicker(
 
     DatePicker(
         state = datePickerState,
-        modifier = modifier.clip(MaterialTheme.shapes.large),
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.large),
         colors = DatePickerDefaults.colors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
         title = null,
         headline = {
-            ProvideTextStyle(MaterialTheme.typography.titleMedium) {
-                val headlineModifier = Modifier.padding(
-                    start = 24.dp, top = 16.dp, end = 12.dp, bottom = 12.dp
-                )
-
-                if (datePickerState.selectedDateMillis == null) {
-                    Text(
-                        text = stringResource(R.string.planned_date_picker_status_unscheduled),
-                        modifier = headlineModifier,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                } else {
-                    DatePickerDefaults.DatePickerHeadline(
-                        selectedDateMillis = datePickerState.selectedDateMillis,
-                        displayMode = datePickerState.displayMode,
-                        dateFormatter = DatePickerDefaults.dateFormatter(),
-                        modifier = Modifier.padding(
-                            start = 24.dp,
-                            top = 16.dp,
-                            end = 12.dp,
-                            bottom = 12.dp
-                        ),
-                        contentColor = MaterialTheme.colorScheme.onSurface
-                    )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 48.dp)
+                    .padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically
+            ) {
+                ProvideTextStyle(MaterialTheme.typography.titleMedium) {
+                    val headlineModifier = Modifier
+                        .weight(1f)
+                        .padding(start = 8.dp)
+                    if (datePickerState.selectedDateMillis == null) {
+                        Text(
+                            text = stringResource(R.string.planned_date_picker_status_unscheduled),
+                            modifier = headlineModifier,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    } else {
+                        DatePickerDefaults.DatePickerHeadline(
+                            selectedDateMillis = datePickerState.selectedDateMillis,
+                            displayMode = datePickerState.displayMode,
+                            dateFormatter = DatePickerDefaults.dateFormatter(),
+                            modifier = headlineModifier,
+                            contentColor = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
+                if (pickedDate != null) {
+                    TextButton(onClick = { datePickerState.setSelectedDate(null) }) {
+                        Text(text = stringResource(R.string.todo_editor_field_clear_planned_date))
+                    }
                 }
             }
         },
@@ -104,7 +114,6 @@ private fun PlannedDatePickerPreview() {
         PlannedDatePicker(
             today = LocalDate.of(2026, 9, 23),
             selectedDate = LocalDate.of(2026, 9, 23),
-            onDateChange = {}
-        )
+            onDateChange = {})
     }
 }
